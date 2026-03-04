@@ -1643,10 +1643,10 @@ const COURSES = {
       category: 'specialty',
       formula: 'PF = C1(25%) + EP(15%) + C2(25%) + EF(35%)',
       rubros: [
-        { key: 'c1', label: 'Consolidado 1', weight: 0.25, desc: 'Unid.1 Sems1-4: cuestionarios teóricos semanales — prueba objetiva (20%) + resolución de casos semanales — ficha de evaluación (30%) · Unid.2 Sems5-7: cuestionarios teóricos semanales (20%) + resolución de casos semanales — ficha (30%)' },
+        { key: 'c1', label: 'Consolidado 1', weight: 0.25, desc: 'Prueba objetiva Unid.1 (20%) + Resolución de casos Unid.1 (30%) + Prueba objetiva Unid.2 (20%) + Resolución de casos Unid.2 (30%) · Sems. 1-7' },
         { key: 'ep', label: 'Exam. Parcial', weight: 0.15, desc: 'Unids.1-2 · Sem8: evaluación teórico-práctica individual — prueba mixta' },
-        { key: 'c2', label: 'Consolidado 2', weight: 0.25, desc: 'Unid.3 Sems9-12: cuestionarios teóricos semanales — prueba objetiva (20%) + resolución de casos semanales — ficha de evaluación (30%) · Unid.4 Sems13-15: cuestionarios teóricos semanales (20%) + resolución de casos semanales — ficha (30%)' },
-        { key: 'ef', label: 'Exam. Final', weight: 0.35, desc: 'Todas las unidades · Sem16: prueba mixta individual + resolución de casos individual o grupal — rúbrica de evaluación de competencias' },
+        { key: 'c2', label: 'Consolidado 2', weight: 0.25, desc: 'Prueba objetiva Unid.3 (20%) + Resolución de casos Unid.3 (30%) + Prueba objetiva Unid.4 (20%) + Resolución de casos Unid.4 (30%) · Sems. 9-15' },
+        { key: 'ef', label: 'Exam. Final', weight: 0.35, desc: 'Todas las unidades · Semana 16' },
       ],
       sustitutoria: false,
     },
@@ -2010,6 +2010,7 @@ function showPage(id) {
   // hide hero after first interaction
   const hero = document.getElementById('hero');
   if (hero) hero.style.display = 'none';
+  if (id === 'calendario') renderMonthGrid();
 }
 
 // ══════════════════════════════════════
@@ -2191,7 +2192,7 @@ function renderCalcPanel() {
       <span class="chip chip-purple">${c.credits} créditos</span>
     </div>
     <div class="calc-panel-sub">
-      ${c.type} &nbsp;·&nbsp; ${c.hTeoricas}h teóricas + ${c.hPracticas}h prácticas semanales &nbsp;·&nbsp; Prerrequisito: ${c.prereq}
+      ${c.type} &nbsp;·&nbsp; ${c.hTeoricas}h teóricas + ${c.hPracticas}h prácticas semanales
     </div>
 
     ${c.pendiente ? `
@@ -2267,6 +2268,7 @@ function updateGrade(courseId, key, val, el) {
 
 function computeResult(c) {
   const g = grades[c.id] || {};
+
   const weights = { c1: 0.20, ep: 0.25, c2: 0.20, ef: 0.35 };
 
   // Vacíos cuentan como 0 — siempre dividimos entre el peso total (1)
@@ -2785,6 +2787,7 @@ function toggleTheme() {
   localStorage.setItem('meduc-theme', isLight ? 'light' : 'dark');
   renderMalla();
   renderCoursesGrid();
+  renderMonthGrid();
 }
 function updateThemeKnob(isLight) {
   const knob  = document.getElementById('theme-knob');
@@ -2933,6 +2936,9 @@ const CAL_PERIODS = [
   { from: '2026-11-23', to: '2026-11-29', color: 'rgba(234,179,8,0.28)',   label: 'Sem. 15 — Examen Unidad 4',   desc: 'Examen de Unidad 4, pertenece al Consolidado 2 (C2). Semana 15 del semestre.' },
   { from: '2026-11-30', to: '2026-12-06', color: 'rgba(59,130,246,0.30)',  label: 'Sem. 16 — Examen Final (EF)',  desc: 'Examen Final oficial. Semana 16 del semestre 2026-20.' },
   { from: '2026-12-12', to: '2026-12-15', color: 'rgba(239,68,68,0.30)',   label: 'Exámenes Sustitutorios',      desc: 'Exámenes Sustitutorios — reemplaza la nota más baja entre C1, EP, C2 o EF. Del 12 al 15 de diciembre.' },
+  // ── Virtualidad / Presencialidad ──
+  { from: '2026-03-16', to: '2026-04-05', virtualidad: true, label: 'Periodo Virtualidad', desc: 'Clases en modalidad virtual del 16 de marzo al 5 de abril.' },
+  { from: '2026-04-06', to: '2026-04-06', presencialidad: true, label: '¡Vuelta a la Presencialidad!', desc: 'Retorno a clases presenciales a partir del 6 de abril.' },
 ];
 
 // Parse 'YYYY-MM-DD' as LOCAL date (not UTC) to avoid timezone shift
@@ -3032,12 +3038,16 @@ function renderMonthGrid() {
 
   // Build period tint map: dateStr -> {color, label, desc} (last matching period wins)
   const periodMap = {};
+  const isLight = document.documentElement.classList.contains('light');
   CAL_PERIODS.forEach(p => {
     let cur = parseLocalDate(p.from);
     const end = parseLocalDate(p.to);
     while (cur <= end) {
       const ds = cur.getFullYear() + '-' + String(cur.getMonth()+1).padStart(2,'0') + '-' + String(cur.getDate()).padStart(2,'0');
-      periodMap[ds] = { color: p.color, label: p.label, desc: p.desc };
+      let color = p.color;
+      if (p.virtualidad) color = isLight ? '#000000' : '#ffffff';
+      if (p.presencialidad) color = isLight ? '#000000' : '#ffffff';
+      periodMap[ds] = { color, label: p.label, desc: p.desc, virtualidad: p.virtualidad, presencialidad: p.presencialidad };
       cur = new Date(cur.getFullYear(), cur.getMonth(), cur.getDate() + 1);
     }
   });
@@ -3065,12 +3075,21 @@ function renderMonthGrid() {
     const dots = cell.events.slice(0,5).map(ev =>
       `<div class="cal-day-dot" style="background:${TYPE_COLORS[ev.type]}"></div>`
     ).join('');
-    const bgStyle = cell.isSelected ? '' : (cell.period ? `background:${cell.period.color};` : '');
+    const isSpecial = cell.period && (cell.period.virtualidad || cell.period.presencialidad);
+    const bgStyle = cell.isSelected
+      ? (isSpecial ? `background:${cell.period.color};border:2px solid var(--accent);` : '')
+      : (cell.period ? `background:${cell.period.color};` : '');
+    const numColor = isSpecial ? (isLight ? '#ffffff' : '#000000') : '';
+    const numStyle = numColor ? `style="color:${numColor};font-weight:700;"` : '';
+    const isVirtualStart = cell.period && cell.period.virtualidad && cell.dateStr === '2026-03-16';
+    const isPresencial = cell.period && cell.period.presencialidad;
+    const specialLabel = (isVirtualStart || isPresencial) ? `<div style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);font-size:0.45rem;font-weight:800;line-height:1.2;color:${numColor};text-align:center;letter-spacing:0.01em;">${isPresencial ? 'RETORNO A<br>PRESENCIAL' : 'INICIO<br>DE<br>CLASES'}</div>` : '';
     return `<div class="cal-day ${cell.isToday?'today':''} ${cell.isSelected?'selected':''} ${cell.events.length?'has-events':''}"
       style="${bgStyle}"
       onclick="selectCalDay('${cell.dateStr}')">
-      <div class="cal-day-num">${cell.d}</div>
+      <div class="cal-day-num" ${numStyle}>${cell.d}</div>
       ${dots ? `<div class="cal-day-dots">${dots}</div>` : ''}
+      ${specialLabel}
     </div>`;
   }).join('');
 }
@@ -3098,8 +3117,17 @@ function selectCalDay(dateStr) {
 
   let periodBadge = '';
   if (dayPeriod) {
-    periodBadge = `<div style="display:flex;align-items:flex-start;gap:0.5rem;padding:0.4rem 0.5rem;border-radius:6px;background:${dayPeriod.color};margin-bottom:0.4rem;border:1px solid rgba(255,255,255,0.06);">
-      <span style="font-size:0.72rem;font-weight:700;color:var(--text);line-height:1.4;">${dayPeriod.label}</span>
+    const isLightMode = document.documentElement.classList.contains('light');
+    let badgeBg, badgeText;
+    if (dayPeriod.virtualidad || dayPeriod.presencialidad) {
+      badgeBg = isLightMode ? '#000000' : '#ffffff';
+      badgeText = isLightMode ? '#ffffff' : '#000000';
+    } else {
+      badgeBg = dayPeriod.color;
+      badgeText = 'var(--text)';
+    }
+    periodBadge = `<div style="display:flex;align-items:flex-start;gap:0.5rem;padding:0.4rem 0.5rem;border-radius:6px;background:${badgeBg};margin-bottom:0.4rem;border:1px solid rgba(255,255,255,0.06);">
+      <span style="font-size:0.72rem;font-weight:700;color:${badgeText};line-height:1.4;">${dayPeriod.label}</span>
     </div>
     <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;padding:0 0.2rem;">${dayPeriod.desc}</div>`;
   }
