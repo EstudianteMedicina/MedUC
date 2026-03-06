@@ -268,7 +268,8 @@
     transition: opacity 0.15s;
   }
   .mat-btn-gen:hover { opacity: 0.85; }
-  .mat-btn-clear {
+  .mat-btn-danger { background: rgba(239,68,68,0.22) !important; border-color: rgba(239,68,68,0.6) !important; color: #ef4444 !important; }
+  .mat-btn-danger:hover { background: #ef4444 !important; border-color: #ef4444 !important; color: #fff !important; }
     background: var(--surface2); color: var(--muted); font-size: 0.78rem;
     border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.8rem; cursor: pointer;
   }
@@ -327,6 +328,16 @@
   }
   .mat-compact-toggle input:checked + .mat-compact-slider { background: var(--accent); }
   .mat-compact-toggle input:checked + .mat-compact-slider::after { left: 17px; }
+  .mat-days-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+  .mat-days-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .mat-days-chips { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .mat-day-chip {
+    padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--muted);
+    cursor: pointer; transition: all 0.15s; user-select: none;
+  }
+  .mat-day-chip.active { background: rgba(0,194,255,0.12); border-color: var(--accent); color: var(--accent); }
+  .mat-day-chip:hover { border-color: var(--accent); }
   .mat-sem-selector {
     display: flex; gap: 0.5rem; margin-bottom: 1.2rem; flex-wrap: wrap;
   }
@@ -375,6 +386,35 @@
   .mat-picker-note { font-size: 0.62rem; color: var(--muted); margin-top: 0.5rem; }
   .light .mat-picker-wrap { background: #f8fafc; border-color: #e2e8f0; }
   .light .mat-picker-chip { background: #f1f5f9; border-color: #e2e8f0; }
+  /* ── TUTORIAL CAROUSEL ── */
+  .tutorial-section { max-width: 900px; margin: 0 auto 2.5rem; padding: 0 1rem; }
+  .tutorial-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .tutorial-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); }
+  .tutorial-nav { display: flex; gap: 0.4rem; }
+  .tut-nav-btn {
+    width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text); font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+  }
+  .tut-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tutorial-track-wrap { overflow: hidden; border-radius: 12px; }
+  .tutorial-track { display: flex; gap: 1rem; transition: transform 0.4s cubic-bezier(.4,0,.2,1); }
+  .tut-card {
+    min-width: 280px; max-width: 280px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--surface); overflow: hidden; flex-shrink: 0;
+  }
+  .tut-video-wrap { position: relative; width: 100%; padding-top: 56.25%; }
+  .tut-video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .tut-label { padding: 0.6rem 0.8rem; font-size: 0.75rem; font-weight: 700; color: var(--text); }
+  .tut-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 200px; gap: 0.4rem;
+  }
+  .tut-placeholder-icon { font-size: 2rem; opacity: 0.4; }
+  .tut-placeholder-text { font-size: 0.8rem; font-weight: 800; color: var(--muted); }
+  .tut-placeholder-sub { font-size: 0.7rem; color: var(--muted); opacity: 0.7; text-align: center; padding: 0 1rem; }
+  .light .tut-card { background: #f8fafc; border-color: #e2e8f0; }
+
   .page { display: none; padding: 1.5rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
   .page.active { display: block; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -1141,6 +1181,8 @@
   .cal-period-stat strong { display: block; font-size: 0.85rem; color: var(--text); font-family: 'Nunito', sans-serif; font-weight: 800; }
 
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -1312,13 +1354,27 @@
     <div class="mat-right">
       <div class="mat-actions">
         <button class="mat-btn-gen" onclick="matGenerate()">⚡ Generar horario sin choques</button>
-        <button class="mat-btn-clear" onclick="matClear()">✕ Limpiar</button>
+        <button class="mat-btn-clear mat-btn-danger" onclick="matClear()">✕ Limpiar</button>
+        <button class="mat-btn-clear" id="mat-btn-dl" onclick="matDownloadImg()" style="display:none">⬇ Descargar horario</button>
         <span class="mat-conflict-badge" id="mat-conflict-badge" style="display:none">⚠️ Hay choques</span>
         <label class="mat-compact-toggle" title="Intenta generar un horario donde los bloques del mismo día estén a menos de 20 minutos entre sí">
           <input type="checkbox" id="mat-compact-check" onchange="matRenderPicker()">
           <span class="mat-compact-slider"></span>
           <span class="mat-compact-label">Horario compacto <span style="opacity:0.5;font-size:0.65rem">(sin huecos &gt;20min)</span></span>
         </label>
+      </div>
+
+      <div class="mat-days-wrap">
+        <span class="mat-days-label">Días permitidos:</span>
+        <div class="mat-days-chips" id="mat-days-chips">
+          <div class="mat-day-chip active" data-day="0" onclick="matToggleDay(0)">Lun</div>
+          <div class="mat-day-chip active" data-day="1" onclick="matToggleDay(1)">Mar</div>
+          <div class="mat-day-chip active" data-day="2" onclick="matToggleDay(2)">Mié</div>
+          <div class="mat-day-chip active" data-day="3" onclick="matToggleDay(3)">Jue</div>
+          <div class="mat-day-chip active" data-day="4" onclick="matToggleDay(4)">Vie</div>
+          <div class="mat-day-chip active" data-day="5" onclick="matToggleDay(5)">Sáb</div>
+          <div class="mat-day-chip active" data-day="6" onclick="matToggleDay(6)">Dom</div>
+        </div>
       </div>
 
       <div class="mat-picker-wrap">
@@ -3570,6 +3626,205 @@ function carouselGo(i) {
 // MATRÍCULA
 // ══════════════════════════════════════
 const MAT_DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+
+let tutIndex = 0;
+function tutScroll(dir) {
+  const track = document.getElementById('tutorial-track');
+  if (!track) return;
+  const cards = track.querySelectorAll('.tut-card');
+  const total = cards.length;
+  tutIndex = Math.max(0, Math.min(tutIndex + dir, total - 1));
+  const cardWidth = cards[0].offsetWidth + 16;
+  track.style.transform = `translateX(-${tutIndex * cardWidth}px)`;
+}
+
+// ── DAY FILTER ─────────────────────────────────────────────
+let matAllowedDays = new Set([0,1,2,3,4,5,6]); // all days by default
+
+function matToggleDay(day) {
+  if (matAllowedDays.has(day)) {
+    if (matAllowedDays.size === 1) return; // keep at least 1 day
+    matAllowedDays.delete(day);
+  } else {
+    matAllowedDays.add(day);
+  }
+  document.querySelectorAll('.mat-day-chip').forEach(chip => {
+    const d = parseInt(chip.dataset.day);
+    chip.classList.toggle('active', matAllowedDays.has(d));
+  });
+  // Clear selections that now conflict with day filter
+  for (const [cid, sel] of Object.entries(matSelected)) {
+    const slots = matGetAllSlots(cid, sel.sectionNrc, sel.practicaNrc);
+    if (slots.some(s => !matAllowedDays.has(s.day))) {
+      delete matSelected[cid];
+    }
+  }
+  matRenderCourses();
+  matRenderGrid();
+}
+
+function matSlotsAllowedDays(slots) {
+  return slots.every(s => matAllowedDays.has(s.day));
+}
+
+// ── DOWNLOAD SCHEDULE IMAGE ────────────────────────────────
+async function matDownloadImg() {
+  if (Object.keys(matSelected).length === 0) return;
+  const btn = document.getElementById('mat-btn-dl');
+  btn.textContent = '⏳ Generando...';
+  btn.disabled = true;
+
+  const DAYS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const COLORS = [
+    {bg:'#e0f7ff',border:'#00c2ff',text:'#0077aa'},
+    {bg:'#dcfce7',border:'#4ade80',text:'#166534'},
+    {bg:'#fef9c3',border:'#fbbf24',text:'#92400e'},
+    {bg:'#ede9fe',border:'#a78bfa',text:'#5b21b6'},
+    {bg:'#ffe4e6',border:'#fb7185',text:'#9f1239'},
+    {bg:'#d1fae5',border:'#34d399',text:'#065f46'},
+    {bg:'#ffedd5',border:'#f97316',text:'#9a3412'},
+  ];
+
+  const START_H = 7, END_H = 22;
+  const CELL_H = 36; // px per 30min slot
+  const COL_W = 120;
+  const TIME_W = 60;
+  const SLOT = 30;
+  const totalRows = (END_H - START_H) * 2;
+
+  // Gather all slots
+  const courses = matCoursesForSem();
+  const blocks = []; // {day, startMin, endMin, course, sel}
+  for (const [cid, sel] of Object.entries(matSelected)) {
+    const course = courses.find(c => c.id === cid);
+    if (!course) continue;
+    const slots = matGetAllSlots(cid, sel.sectionNrc, sel.practicaNrc);
+    // Sort by start time, then push each slot as independent block
+    slots.sort((a,b) => a.start - b.start);
+    slots.forEach(s => {
+      blocks.push({day: s.day, startMin: s.start, endMin: s.end, prof: s.prof, aula: s.aula, course, sel});
+    });
+  }
+
+  // Always show all 7 days
+  const activeDays = [0,1,2,3,4,5,6];
+  if (blocks.length === 0) { btn.textContent='⬇ Descargar horario'; btn.disabled=false; return; }
+
+  // Find time range tight to actual blocks
+  const minTime = Math.min(...blocks.map(b=>b.startMin));
+  const maxTime = Math.max(...blocks.map(b=>b.endMin));
+  const startMin = Math.floor((minTime - 30) / SLOT) * SLOT;
+  const endMin = Math.ceil((maxTime + 30) / SLOT) * SLOT;
+  const numRows = (endMin - startMin) / SLOT;
+
+  const totalW = TIME_W + activeDays.length * COL_W;
+  const totalH = 56 + 40 + numRows * CELL_H + 60; // header + days + grid + footer
+
+  // Build HTML
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `position:fixed;left:-9999px;top:0;width:${totalW}px;font-family:'Nunito',Arial,sans-serif;background:#fff;`;
+
+  let html = `
+    <div style="background:linear-gradient(135deg,#0f1117,#1a1f2e);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="color:#00c2ff;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Universidad Continental · Medicina Humana</div>
+        <div style="color:#fff;font-size:20px;font-weight:900;">Horario Simulado · ${matCurrentSem}${matCurrentSem===2?'do':matCurrentSem===3?'er':'to'} Semestre</div>
+      </div>
+      <div style="color:rgba(255,255,255,0.4);font-size:10px;">2026-10</div>
+    </div>
+    <div style="display:flex;">
+      <div style="width:${TIME_W}px;flex-shrink:0;"></div>
+      ${activeDays.map(d=>`<div style="width:${COL_W}px;text-align:center;padding:10px 0;font-size:12px;font-weight:800;color:#334155;background:#f8fafc;border-left:1px solid #e2e8f0;">${DAYS[d]}</div>`).join('')}
+    </div>
+    <div style="position:relative;display:flex;">
+      <div style="width:${TIME_W}px;flex-shrink:0;">
+  `;
+
+  // Time labels
+  for (let r=0;r<=numRows;r++) {
+    const totalM = startMin + r*SLOT;
+    const h = Math.floor(totalM/60), m = totalM%60;
+    const label = m===0 ? `${h>12?h-12:h===0?12:h}:00${h>=12?'pm':'am'}` : '';
+    html += `<div style="height:${CELL_H}px;display:flex;align-items:flex-start;justify-content:flex-end;padding-right:8px;padding-top:2px;font-size:10px;color:#94a3b8;font-weight:600;box-sizing:border-box;">${label}</div>`;
+  }
+
+  html += `</div>`;
+
+  // Day columns with grid lines
+  activeDays.forEach(dayIdx => {
+    html += `<div style="width:${COL_W}px;position:relative;border-left:1px solid #e2e8f0;">`;
+    for (let r=0;r<numRows;r++) {
+      const isHour = ((startMin + r*SLOT) % 60) === 0;
+      html += `<div style="height:${CELL_H}px;border-top:1px solid ${isHour?'#cbd5e1':'#f1f5f9'};box-sizing:border-box;"></div>`;
+    }
+    // Blocks for this day
+    const dayBlocks = blocks.filter(b=>b.day===dayIdx).sort((a,b)=>a.startMin-b.startMin);
+    const pdfLastEnd = {};
+    dayBlocks.forEach(b => {
+      const profKey = b.prof || '';
+      const prevEnd = pdfLastEnd[profKey];
+      const snapStart = (prevEnd !== undefined && b.startMin - prevEnd >= 0 && b.startMin - prevEnd < 15) ? prevEnd : b.startMin;
+      pdfLastEnd[profKey] = b.endMin;
+      const top = ((snapStart - startMin) / SLOT) * CELL_H;
+      const height = ((b.endMin - snapStart) / SLOT) * CELL_H;
+      const c = COLORS[b.course.group % COLORS.length];
+      const fmtT = m => { const hh=Math.floor(m/60),mm=String(m%60).padStart(2,'0'),ap=hh>=12?'pm':'am',h12=hh>12?hh-12:hh===0?12:hh; return `${h12}:${mm}${ap}`; };
+      const sec = b.course.sections.find(s=>s.nrc===b.sel.sectionNrc);
+      const prof = (b.prof || sec?.prof || '').split(',').slice(0,2).join(',');
+      const timeStr = `${fmtT(b.startMin)}–${fmtT(b.endMin)}`;
+      const aula = b.aula || '';
+      html += `
+        <div style="position:absolute;top:${top+1}px;left:3px;width:${COL_W-8}px;height:${height-2}px;
+          background:${c.bg};border-left:4px solid ${c.border};border-radius:6px;
+          padding:5px 7px;box-sizing:border-box;overflow:hidden;">
+          <div style="font-size:11px;font-weight:900;color:${c.text};line-height:1.3;">${b.course.short||b.course.name.split(' ').slice(0,3).join(' ')}</div>
+          ${height>36?`<div style="font-size:9.5px;font-weight:700;color:#475569;margin-top:2px;">${timeStr}${aula?' · '+aula:''}</div>`:''}
+          ${height>52?`<div style="font-size:9px;color:#64748b;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${prof}</div>`:''}
+          ${height>68?`<div style="font-size:8.5px;color:#94a3b8;margin-top:1px;">NRC ${b.sel.sectionNrc}</div>`:''}
+        </div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+
+  // Legend
+  html += `<div style="padding:12px 20px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">`;
+  html += `<span style="font-size:10px;font-weight:800;color:#94a3b8;margin-right:4px;">CURSOS:</span>`;
+  Object.keys(matSelected).forEach(cid => {
+    const course = courses.find(c=>c.id===cid);
+    if (!course) return;
+    const c = COLORS[course.group % COLORS.length];
+    html += `<div style="display:flex;align-items:center;gap:5px;">
+      <div style="width:10px;height:10px;border-radius:2px;background:${c.border};flex-shrink:0;"></div>
+      <span style="font-size:10px;font-weight:700;color:#334155;">${course.short||course.name.split(' ').slice(0,3).join(' ')}</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  wrap.innerHTML = html;
+  document.body.appendChild(wrap);
+
+  try {
+    const canvas = await html2canvas(wrap, { scale: 2, useCORS: true, backgroundColor: '#fff', logging: false });
+    const imgData = canvas.toDataURL('image/png');
+    const imgW = canvas.width;
+    const imgH = canvas.height;
+    const { jsPDF } = window.jspdf;
+    const orientation = imgW > imgH ? 'landscape' : 'portrait';
+    const pdf = new jsPDF({ orientation, unit: 'px', format: [imgW / 2, imgH / 2] });
+    pdf.addImage(imgData, 'PNG', 0, 0, imgW / 2, imgH / 2);
+    pdf.save(`horario_${matCurrentSem}sem.pdf`);
+  } catch(e) {
+    console.error(e);
+    alert('Error al generar imagen.');
+  }
+
+  document.body.removeChild(wrap);
+  btn.textContent = '⬇ Descargar horario';
+  btn.disabled = false;
+}
+
 const MAT_COLORS = [
   ['rgba(0,194,255,0.18)',    '#00c2ff'],  // 0 bioquim     - cyan
   ['rgba(74,222,128,0.18)',   '#4ade80'],  // 1 psico       - green
@@ -3793,43 +4048,43 @@ const MAT_COURSES = [
   {
     id: 'estructfunc2', name: 'Estructura y Función II', short: 'Estructura y Función II', group: 2, credits: 12, sem: 5,
     sections: [
-      { nrc:'31480', prof:'Cruz, Tagle R. / Teniente, Góngora J. / Salazar, Alejo R.', teoria:[
-          {day:'lunes',from:'3:40pm',to:'5:09pm',aula:'B907'},
-          {day:'lunes',from:'5:20pm',to:'6:49pm',aula:'B907'},
-          {day:'viernes',from:'2:00pm',to:'3:29pm',aula:'B307'}
+      { nrc:'31480', prof:'Cruz / Teniente / Salazar', teoria:[
+          {day:'lunes',from:'3:40pm',to:'5:09pm',aula:'B907', prof:'Cruz, Tagle R.'},
+          {day:'lunes',from:'5:20pm',to:'6:49pm',aula:'B907', prof:'Teniente, Góngora J.'},
+          {day:'viernes',from:'2:00pm',to:'3:29pm',aula:'B307', prof:'Salazar, Alejo R.'}
         ], practica:[
           { nrc:'31481', prof:'Cruz / Zumaran / Salazar / Teniente', slots:[
-            {day:'martes',from:'7:00pm',to:'9:59pm',aula:'BS02'},
-            {day:'jueves',from:'5:20pm',to:'6:49pm',aula:'B404'},
-            {day:'viernes',from:'5:20pm',to:'6:49pm',aula:'A402'},
-            {day:'sabado',from:'3:40pm',to:'6:39pm',aula:'B404'}
+            {day:'martes',from:'7:00pm',to:'9:59pm',aula:'BS02', prof:'Cruz, Tagle R.'},
+            {day:'jueves',from:'5:20pm',to:'6:49pm',aula:'B404', prof:'Zumaran, Paucara C.'},
+            {day:'viernes',from:'5:20pm',to:'6:49pm',aula:'A402', prof:'Salazar, Alejo R.'},
+            {day:'sabado',from:'3:40pm',to:'6:39pm',aula:'B404', prof:'Teniente, Góngora J.'}
           ]},
           { nrc:'31482', prof:'Cruz / Zumaran / Teniente / Por asignar', slots:[
-            {day:'lunes',from:'7:00pm',to:'9:59pm',aula:'BS02'},
-            {day:'jueves',from:'3:40pm',to:'5:09pm',aula:'B404'},
-            {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'B206'},
-            {day:'viernes',from:'5:20pm',to:'6:49pm',aula:'B206'},
-            {day:'sabado',from:'10:20am',to:'11:49am',aula:'B404'}
+            {day:'lunes',from:'7:00pm',to:'9:59pm',aula:'BS02', prof:'Cruz, Tagle R.'},
+            {day:'jueves',from:'3:40pm',to:'5:09pm',aula:'B404', prof:'Zumaran, Paucara C.'},
+            {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'B206', prof:'Teniente, Góngora J.'},
+            {day:'viernes',from:'5:20pm',to:'6:49pm',aula:'B206', prof:'Teniente, Góngora J.'},
+            {day:'sabado',from:'10:20am',to:'11:49am',aula:'B404', prof:'Por asignar'}
           ]},
         ]
       },
-      { nrc:'31483', prof:'Vera, Portilla A. / Tanco, Urday J. / Salazar, Alejo R.', teoria:[
-          {day:'lunes',from:'5:20pm',to:'6:49pm',aula:'B205'},
-          {day:'lunes',from:'7:00pm',to:'8:29pm',aula:'B806'},
-          {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'A303'}
+      { nrc:'31483', prof:'Vera / Tanco / Salazar', teoria:[
+          {day:'lunes',from:'5:20pm',to:'6:49pm',aula:'B205', prof:'Vera, Portilla A.'},
+          {day:'lunes',from:'7:00pm',to:'8:29pm',aula:'B806', prof:'Tanco, Urday J.'},
+          {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'A303', prof:'Salazar, Alejo R.'}
         ], practica:[
           { nrc:'31484', prof:'Tanco / Vera / Zumaran', slots:[
-            {day:'martes',from:'3:40pm',to:'5:09pm',aula:'B206'},
-            {day:'martes',from:'5:20pm',to:'6:49pm',aula:'B206'},
-            {day:'miercoles',from:'7:00pm',to:'9:59pm',aula:'BS02'},
-            {day:'viernes',from:'7:00pm',to:'9:59pm',aula:'A402'}
+            {day:'martes',from:'3:40pm',to:'5:09pm',aula:'B206', prof:'Tanco, Urday J.'},
+            {day:'martes',from:'5:20pm',to:'6:49pm',aula:'B206', prof:'Tanco, Urday J.'},
+            {day:'miercoles',from:'7:00pm',to:'9:59pm',aula:'BS02', prof:'Vera, Portilla A.'},
+            {day:'viernes',from:'7:00pm',to:'9:59pm',aula:'A402', prof:'Zumaran, Paucara C.'}
           ]},
           { nrc:'31485', prof:'Tanco / Vera / Zumaran / Por asignar', slots:[
-            {day:'martes',from:'7:00pm',to:'9:59pm',aula:'B206'},
-            {day:'miercoles',from:'3:40pm',to:'5:09pm',aula:'BS03'},
-            {day:'miercoles',from:'5:20pm',to:'6:49pm',aula:'BS03'},
-            {day:'viernes',from:'8:30pm',to:'9:59pm',aula:'B404'},
-            {day:'sabado',from:'10:20am',to:'11:49am',aula:'B504'}
+            {day:'martes',from:'7:00pm',to:'9:59pm',aula:'B206', prof:'Tanco, Urday J.'},
+            {day:'miercoles',from:'3:40pm',to:'5:09pm',aula:'BS03', prof:'Vera, Portilla A.'},
+            {day:'miercoles',from:'5:20pm',to:'6:49pm',aula:'BS03', prof:'Vera, Portilla A.'},
+            {day:'viernes',from:'8:30pm',to:'9:59pm',aula:'B404', prof:'Por asignar'},
+            {day:'sabado',from:'10:20am',to:'11:49am',aula:'B504', prof:'Zumaran, Paucara C.'}
           ]},
         ]
       },
@@ -3993,6 +4248,14 @@ function matSelectSection(courseId, sectionNrc, practicaNrc) {
       MAT_COURSES.filter(c => c.group === course.group && c.id !== courseId && (c.sem||3) === matCurrentSem)
         .forEach(c => delete matSelected[c.id]);
     }
+    // Day filter check
+    const dayFilterSlots = matGetAllSlots(courseId, sectionNrc, practicaNrc);
+    if (!matSlotsAllowedDays(dayFilterSlots)) {
+      const dayNames = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+      const forbidden = dayFilterSlots.filter(s => !matAllowedDays.has(s.day)).map(s => dayNames[s.day]);
+      alert(`Esta sección tiene clases el ${[...new Set(forbidden)].join(', ')}, que no está en tus días permitidos.`);
+      matRenderCourses(); matRenderGrid(); return;
+    }
     // Conflict check against all currently selected courses
     const newSlots = matGetAllSlots(courseId, sectionNrc, practicaNrc);
     const conflictWith = [];
@@ -4084,6 +4347,7 @@ function matGenerate() {
       for (const prac of pracOptions) {
         const pracNrc = prac ? prac.nrc : null;
         const slots = matGetAllSlots(course.id, sec.nrc, pracNrc);
+        if (!matSlotsAllowedDays(slots)) continue; // skip if uses forbidden days
         let conflict = false;
         for (const [cid, sel] of Object.entries(chosen)) {
           const other = matGetAllSlots(cid, sel.sectionNrc, sel.practicaNrc);
@@ -4151,22 +4415,28 @@ function matRenderCourses() {
     lastGroup = course.group;
 
     const sections = course.sections.map(sec => {
-      const teoriaStr = sec.teoria
-        ? sec.teoria.map(s => `${s.day.substring(0,3)} ${s.from}-${s.to}`).join(', ')
-        : sec.slots ? sec.slots.map(s => `${s.day.substring(0,3)} ${s.from}-${s.to}`).join(', ') : '';
+      const fmtSlotLine = s => {
+        const line = `${s.day.substring(0,3)} ${s.from}–${s.to} · ${s.aula||''}`;
+        return s.prof ? `<div style="font-size:0.6rem;color:var(--text);opacity:0.9">${s.prof}: ${line}</div>` : `<div style="font-size:0.6rem;opacity:0.8">${line}</div>`;
+      };
+      const teoriaLines = sec.teoria
+        ? sec.teoria.map(fmtSlotLine).join('')
+        : sec.slots ? sec.slots.map(fmtSlotLine).join('') : '';
 
       if (sec.practica) {
         return sec.practica.map(prac => {
           const isSelected = sel?.sectionNrc === sec.nrc && sel?.practicaNrc === prac.nrc;
-          const pracStr = prac.slots.map(s => `${s.day.substring(0,3)} ${s.from}-${s.to}`).join(', ');
-          const pracProf = prac.prof ? `<div style="font-size:0.62rem;font-weight:700;color:var(--text);margin-top:0.15rem">Práctica: ${prac.prof}</div>` : '';
+          const pracLines = prac.slots.map(fmtSlotLine).join('');
+          const pracProf = (!prac.slots[0]?.prof && prac.prof) ? `<div style="font-size:0.62rem;font-weight:700;color:var(--text);margin-top:0.15rem">Práctica: ${prac.prof}</div>` : '';
           return `<button class="mat-section-btn ${isSelected ? 'selected' : ''}"
             onclick="matSelectSection('${course.id}','${sec.nrc}','${prac.nrc}')">
             <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc} + ${prac.nrc}</div>
             <div class="mat-section-prof">${sec.prof}</div>
-            <div class="mat-section-time"><span style="font-weight:600;color:var(--text)">Teoría:</span> ${teoriaStr}</div>
+            <div class="mat-section-time"><span style="font-weight:600;color:var(--text)">Teoría:</span></div>
+            ${teoriaLines}
             ${pracProf}
-            <div class="mat-section-time"><span style="font-weight:600;color:var(--text)">Práctica:</span> ${pracStr}</div>
+            <div class="mat-section-time" style="margin-top:0.2rem"><span style="font-weight:600;color:var(--text)">Práctica:</span></div>
+            ${pracLines}
           </button>`;
         }).join('');
       } else {
@@ -4175,7 +4445,7 @@ function matRenderCourses() {
           onclick="matSelectSection('${course.id}','${sec.nrc}',null)">
           <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc}</div>
           <div class="mat-section-prof">${sec.prof}</div>
-          <div class="mat-section-time">${teoriaStr}</div>
+          ${teoriaLines}
         </button>`;
       }
     }).join('');
@@ -4193,6 +4463,8 @@ function matRenderCourses() {
 
   const badge = document.getElementById('mat-conflict-badge');
   if (badge) badge.style.display = matHasConflicts() ? 'inline-flex' : 'none';
+  const dlBtn = document.getElementById('mat-btn-dl');
+  if (dlBtn) dlBtn.style.display = Object.keys(matSelected).length > 0 ? 'inline-flex' : 'none';
 }
 
 function matToggleCourse(courseId) {
@@ -4242,18 +4514,23 @@ function matRenderGrid() {
 
 
 
-    // Track last block end-row per day to snap consecutive blocks with gap < 15min
+    // Sort slots by start time to ensure correct snap order
+    slots.sort((a, b) => a.start - b.start);
+
+    // Track last block end-row per day+prof to snap consecutive same-prof blocks with gap < 15min
     const lastEndRow = {};
 
     slots.forEach(slot => {
       if (slot.day < 0 || slot.day > 6) return;
       const startRow = Math.round((slot.start - START) / SLOT);
       const endRow = Math.round((slot.end - START) / SLOT);
-      // Snap to previous block if gap < 15 min (1 slot = 30min, so < 0.5 slots)
-      const prevEnd = lastEndRow[slot.day];
-      const snapRow = (prevEnd !== undefined && startRow - prevEnd < 1) ? prevEnd : startRow;
-      lastEndRow[slot.day] = endRow;
       if (startRow < 0 || endRow > rows) return;
+
+      // Snap only if same professor and gap < 15 min
+      const profKey = `${slot.day}_${slot.prof||''}`;
+      const prevEnd = lastEndRow[profKey];
+      const snapRow = (prevEnd !== undefined && startRow - prevEnd >= 0 && startRow - prevEnd <= 1) ? prevEnd : startRow;
+      lastEndRow[profKey] = endRow;
 
       const cell = el.querySelector(`[data-row="${snapRow}"][data-col="${slot.day}"]`);
       if (!cell) return;
@@ -4269,6 +4546,8 @@ function matRenderGrid() {
         const prac = sec.practica.find(p => p.nrc === sel.practicaNrc);
         if (prac?.prof) profName = prac.prof;
       }
+      // Per-slot professor overrides section professor
+      if (slot.prof) profName = slot.prof;
       const displayNrc = sel.practicaNrc && slot.isPractica ? sel.practicaNrc : sel.sectionNrc;
       const fmtTime = m => { const h=Math.floor(m/60), min=String(m%60).padStart(2,'0'), ap=h>=12?'pm':'am', h12=h>12?h-12:h===0?12:h; return `${h12}:${min}${ap}`; };
       const timeRange = `${fmtTime(slot.start)}–${fmtTime(slot.end)}`;
