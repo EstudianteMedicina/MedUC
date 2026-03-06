@@ -170,7 +170,7 @@
 
   /* Carrusel */
   .carousel-wrap { position: relative; padding: 0 2rem; margin-bottom: 0.6rem; overflow: hidden; }
-  .carousel-track-outer { overflow: visible; padding: 10px 0 16px; }
+  .carousel-track-outer { overflow: visible; padding: 8px 4px 14px; margin: 0 -4px; clip-path: inset(-20px 0px); }
   .carousel-track { display: flex; gap: 0.75rem; transition: transform 0.35s cubic-bezier(.4,0,.2,1); align-items: center; position: relative; }
   .countdown-card {
     flex: 0 0 calc(33.333% - 0.5rem); min-width: 0;
@@ -223,7 +223,158 @@
   @keyframes dotFill { from { width: 0%; } to { width: 100%; } }
   @media (max-width: 500px) { .countdown-card { flex: 0 0 100%; } }
 
-  /* ── PAGES ── */
+
+  /* ── MATRÍCULA ── */
+  .mat-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1.2rem; align-items: start; }
+  @media (max-width: 800px) { .mat-layout { grid-template-columns: 1fr; } }
+
+  .mat-courses { display: flex; flex-direction: column; gap: 0.6rem; }
+  .mat-course-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .mat-course-header {
+    padding: 0.7rem 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .mat-course-header:hover { background: var(--surface2); }
+  .mat-course-name { font-size: 0.78rem; font-weight: 700; color: var(--text); flex: 1; }
+  .mat-course-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .mat-course-chevron { font-size: 0.7rem; color: var(--muted); transition: transform 0.2s; }
+  .mat-course-card.open .mat-course-chevron { transform: rotate(180deg); }
+  .mat-sections { display: none; padding: 0 0.6rem 0.6rem; gap: 0.4rem; flex-direction: column; }
+  .mat-course-card.open .mat-sections { display: flex; }
+  .mat-section-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.5rem 0.7rem; cursor: pointer; text-align: left;
+    transition: all 0.15s; width: 100%;
+  }
+  .mat-section-btn:hover { border-color: var(--accent); }
+  .mat-section-btn.selected { border-color: var(--accent); background: rgba(0,194,255,0.08); }
+  .mat-section-btn.conflict { border-color: #ef4444; background: rgba(239,68,68,0.08); }
+  .mat-section-nrc { font-size: 0.65rem; font-weight: 700; color: var(--accent); }
+  .mat-section-prof { font-size: 0.7rem; color: var(--text); font-weight: 600; margin: 0.1rem 0; }
+  .mat-section-time { font-size: 0.65rem; color: var(--muted); line-height: 1.4; }
+
+  /* Grilla */
+  .mat-right { display: flex; flex-direction: column; gap: 0.8rem; }
+  .mat-actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+  .mat-btn-gen {
+    background: var(--accent); color: #000; font-weight: 700; font-size: 0.78rem;
+    border: none; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .mat-btn-gen:hover { opacity: 0.85; }
+  .mat-btn-clear {
+    background: var(--surface2); color: var(--muted); font-size: 0.78rem;
+    border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.8rem; cursor: pointer;
+  }
+  .mat-conflict-badge {
+    background: rgba(239,68,68,0.12); color: #ef4444; font-size: 0.72rem; font-weight: 700;
+    border: 1px solid rgba(239,68,68,0.3); border-radius: 6px; padding: 0.3rem 0.6rem;
+  }
+  .mat-grid-wrap { overflow-x: auto; }
+  .mat-grid {
+    display: grid;
+    grid-template-columns: 52px repeat(7, 1fr);
+    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    min-width: 480px; font-size: 0.65rem;
+  }
+  .mat-cell {
+    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    min-height: 32px; position: relative;
+  }
+  .mat-cell:last-child { border-right: none; }
+  .mat-cell.header {
+    background: var(--surface2); font-weight: 700; font-size: 0.7rem;
+    text-align: center; padding: 0.4rem 0.2rem; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .mat-cell.time-label {
+    background: var(--surface2); text-align: right; padding: 0.2rem 0.4rem;
+    color: var(--muted); font-size: 0.62rem; line-height: 32px;
+  }
+  .mat-block {
+    position: absolute; left: 1px; right: 1px;
+    border-radius: 4px; padding: 3px 4px;
+    font-size: 0.65rem; font-weight: 600; overflow: hidden;
+    pointer-events: none; z-index: 1; line-height: 1.3;
+  }
+  .light .mat-course-card { background: #f8fafc; border-color: #e2e8f0; }
+  .light .mat-section-btn { background: #f1f5f9; border-color: #e2e8f0; }
+  .light .mat-cell.header, .light .mat-cell.time-label { background: #f1f5f9; }
+  .light .mat-btn-clear { background: #f1f5f9; border-color: #e2e8f0; }
+  .light .mat-grid { border-color: #e2e8f0; }
+  .light .mat-cell { border-color: #e2e8f0; }
+
+  .mat-compact-toggle {
+    display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
+    font-size: 0.72rem; font-weight: 600; color: var(--text); user-select: none;
+    margin-left: 0.4rem;
+  }
+  .mat-compact-toggle input { display: none; }
+  .mat-compact-slider {
+    width: 32px; height: 18px; border-radius: 9px; background: var(--border);
+    position: relative; flex-shrink: 0; transition: background 0.2s;
+  }
+  .mat-compact-slider::after {
+    content:''; position: absolute; width: 12px; height: 12px;
+    border-radius: 50%; background: #fff; top: 3px; left: 3px;
+    transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .mat-compact-toggle input:checked + .mat-compact-slider { background: var(--accent); }
+  .mat-compact-toggle input:checked + .mat-compact-slider::after { left: 17px; }
+  .mat-sem-selector {
+    display: flex; gap: 0.5rem; margin-bottom: 1.2rem; flex-wrap: wrap;
+  }
+  .mat-sem-btn {
+    padding: 0.45rem 1.1rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--muted);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .mat-sem-btn:hover { border-color: var(--accent); color: var(--text); }
+  .mat-sem-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+  .mat-sem-btn.disabled { opacity: 0.4; cursor: not-allowed; }
+  .mat-sem-placeholder {
+    text-align: center; padding: 4rem 2rem;
+    border: 2px dashed var(--border); border-radius: 16px;
+    margin-top: 0.5rem;
+  }
+  .mat-placeholder-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+  .mat-placeholder-text { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+  .mat-placeholder-sub { font-size: 0.78rem; color: var(--muted); }
+  .light .mat-sem-btn { background: #f1f5f9; border-color: #e2e8f0; }
+  .mat-picker-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 0.8rem;
+  }
+  .mat-picker-header { display: flex; align-items: center; width: 100%; margin-bottom: 0.6rem; }
+  .mat-picker-title { font-size: 0.75rem; font-weight: 700; color: var(--text); flex: 1; }
+  .mat-credits-badge {
+    margin-left: auto; flex-shrink: 0; white-space: nowrap;
+    font-size: 0.72rem; font-weight: 800; padding: 0.2rem 0.6rem;
+    border-radius: 20px; background: rgba(0,194,255,0.1); color: var(--accent);
+    border: 1px solid rgba(0,194,255,0.25);
+  }
+  .mat-credits-badge.over { background: rgba(239,68,68,0.1); color: #ef4444; border-color: rgba(239,68,68,0.3); }
+  .mat-credits-badge.under { background: rgba(251,191,36,0.1); color: #f59e0b; border-color: rgba(251,191,36,0.3); }
+  .mat-picker-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .mat-picker-chip {
+    display: flex; align-items: center; gap: 0.3rem;
+    padding: 0.3rem 0.6rem; border-radius: 20px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface2);
+    font-size: 0.68rem; font-weight: 600; color: var(--muted);
+    transition: all 0.15s; user-select: none;
+  }
+  .mat-picker-chip.active { color: var(--text); }
+  .mat-picker-chip .chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .mat-picker-chip .chip-credits { opacity: 0.65; font-weight: 500; }
+  .mat-picker-note { font-size: 0.62rem; color: var(--muted); margin-top: 0.5rem; }
+  .light .mat-picker-wrap { background: #f8fafc; border-color: #e2e8f0; }
+  .light .mat-picker-chip { background: #f1f5f9; border-color: #e2e8f0; }
   .page { display: none; padding: 1.5rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
   .page.active { display: block; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -1001,6 +1152,7 @@
     <button class="nav-tab" onclick="showPage('calendario')">Calendario</button>
     <button class="nav-tab" onclick="showPage('cursos')">Cursos</button>
     <button class="nav-tab" onclick="showPage('malla')">Malla</button>
+    <button class="nav-tab" onclick="showPage('matricula')">Simulador</button>
     <button class="nav-tab" onclick="showPage('info')">Info</button>
   </div>
 </nav>
@@ -1029,7 +1181,7 @@
 <div class="hero" id="hero">
   <div class="hero-badge">⚕️ Universidad Continental · Medicina Humana</div>
   <h1>Tu asistente<br><span>académico</span></h1>
-  <p>Calcula tus notas en tiempo real, consulta la malla curricular y conoce los requisitos de cada curso.</p>
+  <p>Todo lo que necesitas saber sobre tu semestre, cuando lo necesitas.<br>Calcula tus promedios, revisa la malla y nunca pierdas de vista tus próximas evaluaciones.</p>
 </div>
 <div id="countdown-section" style="max-width:700px;margin:0 auto 2rem;padding:0 1rem;"></div>
 </div>
@@ -1131,6 +1283,60 @@
 <!-- ══════════════════════════════════════
      PAGE: INFO
 ══════════════════════════════════════ -->
+
+<!-- ══════════════════════════════════════
+     PAGE: MATRÍCULA
+══════════════════════════════════════ -->
+<div id="page-matricula" class="page">
+  <div class="section-title">Simulador de Matrícula</div>
+  <p class="section-sub">Arma tu horario para el semestre 2026-10. Selecciona una sección por curso y visualiza tu semana.</p>
+
+  <div class="mat-sem-selector" id="mat-sem-selector">
+    <button class="mat-sem-btn" onclick="matSetSem(2)">2do sem.</button>
+    <button class="mat-sem-btn active" onclick="matSetSem(3)">3er sem.</button>
+    <button class="mat-sem-btn" onclick="matSetSem(4)">4to sem.</button>
+    <button class="mat-sem-btn" onclick="matSetSem(5)">5to sem.</button>
+  </div>
+
+  <div id="mat-sem-placeholder" class="mat-sem-placeholder" style="display:none">
+    <div class="mat-placeholder-icon">🚧</div>
+    <div class="mat-placeholder-text">En construcción</div>
+    <div class="mat-placeholder-sub">Este semestre estará disponible pronto.</div>
+  </div>
+
+  <div class="mat-layout" id="mat-sim-layout">
+    <!-- Panel izquierdo: cursos -->
+    <div class="mat-courses" id="mat-courses"></div>
+
+    <!-- Panel derecho: grilla + acciones -->
+    <div class="mat-right">
+      <div class="mat-actions">
+        <button class="mat-btn-gen" onclick="matGenerate()">⚡ Generar horario sin choques</button>
+        <button class="mat-btn-clear" onclick="matClear()">✕ Limpiar</button>
+        <span class="mat-conflict-badge" id="mat-conflict-badge" style="display:none">⚠️ Hay choques</span>
+        <label class="mat-compact-toggle" title="Intenta generar un horario donde los bloques del mismo día estén a menos de 20 minutos entre sí">
+          <input type="checkbox" id="mat-compact-check" onchange="matRenderPicker()">
+          <span class="mat-compact-slider"></span>
+          <span class="mat-compact-label">Horario compacto <span style="opacity:0.5;font-size:0.65rem">(sin huecos &gt;20min)</span></span>
+        </label>
+      </div>
+
+      <div class="mat-picker-wrap">
+        <div class="mat-picker-header">
+          <span class="mat-picker-title">Cursos para generación automática</span>
+          <span class="mat-credits-badge" id="mat-credits-total">0 créditos</span>
+        </div>
+        <div class="mat-picker-grid" id="mat-picker-grid"></div>
+        <div class="mat-picker-note">Solo los cursos marcados participan en ⚡ Generar. Mínimo: 12 cr · Máximo: 25 cr.</div>
+      </div>
+
+      <div class="mat-grid-wrap">
+        <div class="mat-grid" id="mat-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="page-info" class="page">
   <div class="section-title">Información Académica</div>
   <p class="section-sub">Todo lo que necesitas saber sobre evaluaciones, modalidades y el sistema de la carrera.</p>
@@ -2078,6 +2284,7 @@ function showPage(id) {
   document.getElementById('page-' + id).classList.add('active');
   event.target.classList.add('active');
   if (id === 'calendario') renderMonthGrid();
+  if (id === 'matricula') initMatricula();
   if (id === 'inicio') { renderCountdown(); }
   else { carouselStopAuto(); }
 }
@@ -3240,7 +3447,6 @@ function renderCountdown() {
 
   let html = '';
 
-  // Banner evento activo
   if (active) {
     const daysLeft = Math.round((parseLocalDate(active.to) - today) / 86400000);
     const sub = daysLeft === 0 ? 'Es el último día.' : `Termina en ${daysLeft} día${daysLeft !== 1 ? 's' : ''}.`;
@@ -3251,8 +3457,7 @@ function renderCountdown() {
     </div>`;
   }
 
-  // Tarjetas de todas las fechas
-  const cards = COUNTDOWN_EVENTS.map(e => {
+  function makeCard(e) {
     const f = parseLocalDate(e.from);
     const isActiveCard = active && e.label === active.label && e.from === active.from;
     const days = isActiveCard ? 0 : Math.round((f - today) / 86400000);
@@ -3267,10 +3472,12 @@ function renderCountdown() {
       <div class="countdown-card-unit">${unitLabel}</div>
       <div class="countdown-card-date">${dateStr}</div>
     </div>`;
-  }).join('');
+  }
 
   const total = COUNTDOWN_EVENTS.length;
   const maxIdx = Math.max(0, total - CAR_VISIBLE);
+  const allCards = COUNTDOWN_EVENTS.map(e => makeCard(e)).join('');
+
   const dots = Array.from({length: maxIdx + 1}, (_, i) =>
     `<div class="carousel-dot ${i === carouselIdx ? 'active' : ''}" onclick="carouselGo(${i})"></div>`
   ).join('');
@@ -3278,32 +3485,39 @@ function renderCountdown() {
   html += `<div class="carousel-wrap">
     <button class="carousel-btn prev" onclick="carouselStep(-1)">‹</button>
     <div class="carousel-track-outer">
-      <div class="carousel-track" id="carousel-track">${cards}</div>
+      <div class="carousel-track" id="carousel-track">${allCards}</div>
     </div>
     <button class="carousel-btn next" onclick="carouselStep(1)">›</button>
   </div>
   <div class="carousel-dots" id="carousel-dots">${dots}</div>`;
 
   el.innerHTML = html;
-  carouselApply();
+  carouselIdx = 0;
+  carouselApply(false);
   carouselStartAuto();
 }
 
-function carouselApply() {
+function carouselApply(animate = true) {
   const track = document.getElementById('carousel-track');
   if (!track || !track.children[0]) return;
-  const maxIdx = Math.max(0, COUNTDOWN_EVENTS.length - CAR_VISIBLE);
+  const total = COUNTDOWN_EVENTS.length;
+  const maxIdx = Math.max(0, total - CAR_VISIBLE);
   carouselIdx = Math.max(0, Math.min(carouselIdx, maxIdx));
   const cardW = track.children[0].offsetWidth + 12;
+  track.style.transition = animate ? 'transform 0.35s cubic-bezier(.4,0,.2,1)' : 'none';
   track.style.transform = `translateX(-${carouselIdx * cardW}px)`;
+
   document.querySelectorAll('.carousel-dot').forEach((d, i) => {
-    d.classList.toggle('active', i === carouselIdx);
-    if (i === carouselIdx) {
-      d.offsetWidth; // force reflow to restart animation
+    const shouldBeActive = i === carouselIdx;
+    const wasActive = d.classList.contains('active');
+    d.classList.toggle('active', shouldBeActive);
+    if (shouldBeActive && !wasActive) {
+      const clone = d.cloneNode(true);
+      d.parentNode.replaceChild(clone, d);
+      clone.addEventListener('click', () => carouselGo(i));
     }
   });
 
-  // Apply coverflow effect: center card overlaps sides and comes forward
   const centerPos = carouselIdx + 1;
   Array.from(track.children).forEach((card, i) => {
     const dist = i - centerPos;
@@ -3311,18 +3525,15 @@ function carouselApply() {
     if (dist === 0) {
       card.style.transform = 'scale(1.08)';
       card.style.boxShadow = '0 8px 16px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1)';
-      card.style.zIndex = '10';
-      card.style.opacity = '1';
+      card.style.zIndex = '10'; card.style.opacity = '1';
     } else if (Math.abs(dist) === 1) {
-      card.style.transform = 'translateY(0px) scale(0.95)';
+      card.style.transform = 'scale(0.95)';
       card.style.boxShadow = '0 3px 6px rgba(0,0,0,0.2)';
-      card.style.zIndex = '5';
-      card.style.opacity = '0.85';
+      card.style.zIndex = '5'; card.style.opacity = '0.85';
     } else {
-      card.style.transform = 'translateY(0px) scale(0.88)';
+      card.style.transform = 'scale(0.88)';
       card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-      card.style.zIndex = '1';
-      card.style.opacity = '0.5';
+      card.style.zIndex = '1'; card.style.opacity = '0.5';
     }
   });
 }
@@ -3352,6 +3563,734 @@ function carouselGo(i) {
   carouselIdx = i;
   carouselApply();
   carouselStartAuto();
+}
+
+
+// ══════════════════════════════════════
+// MATRÍCULA
+// ══════════════════════════════════════
+const MAT_DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+const MAT_COLORS = [
+  ['rgba(0,194,255,0.18)',    '#00c2ff'],  // 0 bioquim     - cyan
+  ['rgba(74,222,128,0.18)',   '#4ade80'],  // 1 psico       - green
+  ['rgba(251,191,36,0.18)',   '#fbbf24'],  // 2 estadist    - amber
+  ['rgba(167,139,250,0.18)',  '#a78bfa'],  // 3 elec gen 2  - violet
+  ['rgba(251,113,133,0.18)',  '#fb7185'],  // 4 elec gen 3  - rose
+  ['rgba(52,211,153,0.18)',   '#34d399'],  // 5 elec gen 4  - emerald
+  ['rgba(249,115,22,0.18)',   '#f97316'],  // 6 liderazgo   - orange
+];
+
+// Parse "lunes" -> 0, "martes" -> 1, etc.
+function matDayIdx(d) {
+  return ['lunes','martes','miercoles','miercolees','jueves','viernes','sabado','domingo'].indexOf(d.toLowerCase().replace('é','e').replace('á','a').replace('ó','o'));
+}
+function matDayToGrid(d) {
+  // lunes=0->col1, martes=1->col2, mie=2->col3, jue=3->col4, vie=4->col5, sab=5->col6, dom=6->col7
+  const map = {lunes:0,martes:1,miercoles:2,miercolees:2,jueves:3,viernes:4,sabado:5,domingo:6};
+  return map[d.toLowerCase().replace('é','e').replace('á','a').replace('ó','o').replace('à','a')] ?? -1;
+}
+function matParseTime(t) {
+  // "7:00am" -> minutes from 7:00
+  const m = t.match(/(\d+):(\d+)(am|pm)/i);
+  if (!m) return 0;
+  let h = parseInt(m[1]), min = parseInt(m[2]);
+  if (m[3].toLowerCase() === 'pm' && h !== 12) h += 12;
+  if (m[3].toLowerCase() === 'am' && h === 12) h = 0;
+  return h * 60 + min;
+}
+
+// Slot: {day:0-6, start:minutes, end:minutes}
+function matParseSlots(slotsArr) {
+  // slotsArr: [{day:"lunes", from:"7:00am", to:"8:29am"}, ...]
+  return slotsArr.map(s => ({
+    day: matDayToGrid(s.day),
+    start: matParseTime(s.from),
+    end: matParseTime(s.to),
+    aula: s.aula || ''
+  })).filter(s => s.day >= 0);
+}
+
+const MAT_COURSES = [
+  {
+    id: 'bioquim', name: 'Bioquímica y Biología Molecular', group: 0, credits: 8,
+    sections: [
+      { nrc:'32150', prof:'Alvarado, Cárdenas V.', teoria:[
+          {day:'martes',from:'3:40pm',to:'5:09pm',aula:'A1006'},
+          {day:'martes',from:'5:20pm',to:'6:49pm',aula:'A1006'}
+        ], practica:[
+          { nrc:'32152', prof:'Alvarado, Cárdenas V.', slots:[{day:'martes',from:'7:00pm',to:'9:59pm',aula:'A403'},{day:'jueves',from:'7:00pm',to:'9:59pm',aula:'B504'}] },
+          { nrc:'32151', prof:'Alvarado, Cárdenas V.', slots:[{day:'martes',from:'7:00pm',to:'9:59pm',aula:'A403'},{day:'jueves',from:'7:00pm',to:'9:59pm',aula:'B504'}] },
+        ]
+      },
+      { nrc:'32153', prof:'Ticona, Zela J.', teoria:[
+          {day:'viernes',from:'2:00pm',to:'3:29pm',aula:'B506'},
+          {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'B506'}
+        ], practica:[
+          { nrc:'32155', prof:'Huarachi, Olivera R.', slots:[{day:'sabado',from:'7:00am',to:'8:29am',aula:'A401'},{day:'sabado',from:'8:40am',to:'10:09am',aula:'A401'},{day:'domingo',from:'5:40pm',to:'8:39pm',aula:'A402'}] },
+          { nrc:'32154', prof:'Ticona, Zela J.', slots:[{day:'sabado',from:'7:00am',to:'8:29am',aula:'A401'},{day:'sabado',from:'8:40am',to:'10:09am',aula:'A401'},{day:'domingo',from:'5:40pm',to:'8:39pm',aula:'A402'}] },
+        ]
+      },
+      { nrc:'32159', prof:'Huarachi, Olivera R.', teoria:[
+          {day:'jueves',from:'5:20pm',to:'6:49pm',aula:'B405'},
+          {day:'jueves',from:'7:00pm',to:'8:29pm',aula:'B405'}
+        ], practica:[
+          { nrc:'32161', prof:'León, Vasquez R.', slots:[{day:'viernes',from:'7:00pm',to:'9:59pm',aula:'B504'},{day:'domingo',from:'8:00am',to:'10:59am',aula:'B404'}] },
+          { nrc:'32160', prof:'Huarachi, Olivera R.', slots:[{day:'viernes',from:'7:00pm',to:'9:59pm',aula:'B504'},{day:'domingo',from:'8:00am',to:'10:59am',aula:'B404'}] },
+        ]
+      },
+      { nrc:'32162', prof:'Cano, Valencia G.', teoria:[
+          {day:'lunes',from:'2:00pm',to:'3:29pm',aula:'A1106'},
+          {day:'lunes',from:'3:40pm',to:'5:09pm',aula:'A1106'}
+        ], practica:[
+          { nrc:'32163', prof:'Cano, Valencia G.', slots:[{day:'martes',from:'7:00am',to:'8:29am',aula:'B404'},{day:'martes',from:'8:40am',to:'10:09am',aula:'B404'},{day:'martes',from:'10:20am',to:'11:49am',aula:'B404'},{day:'jueves',from:'7:00am',to:'8:29am',aula:'B404'}] },
+          { nrc:'32164', prof:'Alvarado, Cárdenas V.', slots:[{day:'martes',from:'7:00am',to:'8:29am',aula:'B404'},{day:'martes',from:'8:40am',to:'10:09am',aula:'B404'},{day:'martes',from:'10:20am',to:'11:49am',aula:'B404'},{day:'jueves',from:'7:00am',to:'8:29am',aula:'B404'}] },
+        ]
+      },
+      { nrc:'32156', prof:'Huarachi, Olivera R.', teoria:[
+          {day:'jueves',from:'2:00pm',to:'3:29pm',aula:'B308'},
+          {day:'jueves',from:'3:40pm',to:'5:09pm',aula:'B308'}
+        ], practica:[
+          { nrc:'32157', prof:'Huarachi, Olivera R.', slots:[{day:'sabado',from:'6:50pm',to:'9:49pm',aula:'B206'},{day:'domingo',from:'2:30pm',to:'5:29pm',aula:'A402'}] },
+          { nrc:'32158', prof:'Ticona, Zela J.', slots:[{day:'sabado',from:'6:50pm',to:'9:49pm',aula:'B206'},{day:'domingo',from:'2:30pm',to:'5:29pm',aula:'A402'}] },
+        ]
+      },
+      { nrc:'32165', prof:'León, Vasquez R.', teoria:[
+          {day:'viernes',from:'2:00pm',to:'3:29pm',aula:'B505'},
+          {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'B505'}
+        ], practica:[
+          { nrc:'32166', prof:'Valdivia, Carbajal I.', slots:[{day:'sabado',from:'2:00pm',to:'3:29pm',aula:'B901'},{day:'sabado',from:'3:40pm',to:'5:09pm',aula:'B901'},{day:'domingo',from:'11:10am',to:'2:09pm',aula:'A402'}] },
+          { nrc:'32167', prof:'Huarachi, Olivera R.', slots:[{day:'sabado',from:'2:00pm',to:'3:29pm',aula:'B901'},{day:'sabado',from:'3:40pm',to:'5:09pm',aula:'B901'},{day:'domingo',from:'11:10am',to:'2:09pm',aula:'A402'}] },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'psico', name: 'Psicología Aplicada a las CCSS', group: 1, credits: 3,
+    sections: [
+      { nrc:'32290', prof:'Casaperalta, Ortega X.', teoria:[{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'A901'}], practica:[{nrc:'32291',slots:[{day:'jueves',from:'7:00pm',to:'8:29pm',aula:'A901'}]}] },
+      { nrc:'32288', prof:'Hidalgo, Ruiz F.', teoria:[{day:'sabado',from:'10:20am',to:'11:49am',aula:'A801'}], practica:[{nrc:'32289',slots:[{day:'sabado',from:'12:00pm',to:'1:29pm',aula:'A801'}]}] },
+      { nrc:'32292', prof:'Gamero, Nina G.', teoria:[{day:'viernes',from:'2:00pm',to:'3:29pm',aula:'B503'}], practica:[{nrc:'32293',slots:[{day:'viernes',from:'3:40pm',to:'5:09pm',aula:'B503'}]}] },
+      { nrc:'32286', prof:'Delgado, Serna E.', teoria:[{day:'lunes',from:'7:00pm',to:'8:29pm',aula:'A1006'}], practica:[{nrc:'32287',slots:[{day:'lunes',from:'8:30pm',to:'9:59pm',aula:'A1006'}]}] },
+    ]
+  },
+  {
+    id: 'estadist', name: 'Estadística y Probabilidades', group: 2, credits: 4,
+    sections: [
+      { nrc:'31285', prof:'Chaiña, Cahui E.', slots:[{day:'lunes',from:'2:00pm',to:'3:29pm',aula:'B605'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'B501'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'B501'}] },
+      { nrc:'34526', prof:'Núñez, Chávez F.', slots:[{day:'martes',from:'7:00pm',to:'8:29pm',aula:'B806'},{day:'miercoles',from:'2:00pm',to:'3:29pm',aula:'A903'},{day:'miercoles',from:'3:40pm',to:'5:09pm',aula:'A903'}] },
+      { nrc:'32227', prof:'Mayorí, Velásquez D.', slots:[{day:'lunes',from:'3:40pm',to:'5:09pm',aula:'B603'},{day:'viernes',from:'2:00pm',to:'3:29pm',aula:'B401'},{day:'viernes',from:'3:40pm',to:'5:09pm',aula:'B401'}] },
+      { nrc:'31232', prof:'Mayorí, Velásquez D.', slots:[{day:'lunes',from:'2:00pm',to:'3:29pm',aula:'B603'},{day:'martes',from:'2:00pm',to:'3:29pm',aula:'A903'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'A903'}] },
+      { nrc:'32226', prof:'Cuentas, Montenegro M.', slots:[{day:'martes',from:'7:00am',to:'8:29am',aula:'A304'},{day:'jueves',from:'7:00am',to:'8:29am',aula:'B301'},{day:'jueves',from:'8:40am',to:'10:09am',aula:'B301'}] },
+      { nrc:'32225', prof:'Cuentas, Montenegro M.', slots:[{day:'martes',from:'12:00pm',to:'1:29pm',aula:'A304'},{day:'jueves',from:'10:20am',to:'11:49am',aula:'B301'},{day:'jueves',from:'12:00pm',to:'1:29pm',aula:'B301'}] },
+      { nrc:'39824', prof:'Rendón, García F.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'B303'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'B301'}] },
+      { nrc:'39823', prof:'Rendón, García F.', slots:[{day:'lunes',from:'3:40pm',to:'5:09pm',aula:'A705'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'A705'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'A705'}] },
+      { nrc:'39828', prof:'Zea, Ponce R.', slots:[{day:'miercoles',from:'10:20am',to:'11:49am',aula:'A1102'},{day:'jueves',from:'8:40am',to:'10:09am',aula:'B303'},{day:'viernes',from:'12:00pm',to:'1:29pm',aula:'B502'}] },
+      { nrc:'39830', prof:'Núñez, Chávez F.', slots:[{day:'martes',from:'3:40pm',to:'5:09pm',aula:'A302'},{day:'jueves',from:'8:30pm',to:'9:59pm',aula:'B402'},{day:'viernes',from:'8:30pm',to:'9:59pm',aula:'B401'}] },
+      { nrc:'39826', prof:'Vaca, Arizala T.', slots:[{day:'lunes',from:'3:40pm',to:'5:09pm',aula:'B904'},{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'A704'},{day:'jueves',from:'2:00pm',to:'3:29pm',aula:'B302'}] },
+    ]
+  },
+  {
+    id: 'gestion', name: 'Gestión de la Información (ELEC GEN 2)', short: 'Gestión Información', group: 3, credits: 3,
+    sections: [
+      { nrc:'31233', prof:'Ramos, Pacco W.', slots:[{day:'viernes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'viernes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'34546', prof:'Ramos, Pacco W.', slots:[{day:'jueves',from:'7:00pm',to:'8:29pm',aula:'Meet'},{day:'viernes',from:'8:30pm',to:'9:59pm',aula:'Meet'}] },
+      { nrc:'38957', prof:'Ramos, Pacco W.', slots:[{day:'miercoles',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'viernes',from:'3:40pm',to:'5:09pm',aula:'Meet'}] },
+      { nrc:'32250', prof:'Ramos, Pacco W.', slots:[{day:'lunes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'}] },
+    ]
+  },
+  {
+    id: 'gestion2', name: 'Gestión del Aprendizaje y Cultura Digital (ELEC GEN 2)', short: 'Gestión Aprendizaje', group: 3, credits: 3,
+    sections: [
+      { nrc:'39636', prof:'Pezo, Valer R.', slots:[{day:'martes',from:'8:40am',to:'10:09am',aula:'Meet'},{day:'martes',from:'10:20am',to:'11:49am',aula:'Meet'}] },
+      { nrc:'39840', prof:'Urquizo, Salazar R.', slots:[{day:'lunes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+    ]
+  },
+  {
+    id: 'literatura', name: 'Literatura y Sociedad (ELEC GEN 3) — 4to sem.', group: 4, credits: 3,
+    sections: [
+      { nrc:'33534', prof:'Salazar, Vergara M.', slots:[{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'33533', prof:'Salazar, Vergara M.', slots:[{day:'viernes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+    ]
+  },
+  {
+    id: 'peru', name: 'El Perú y el Mundo s. XX-XXI (ELEC GEN 3) — 4to sem.', group: 4, credits: 3,
+    sections: [
+      { nrc:'33508', prof:'Widmann, Orihuela M.', slots:[{day:'jueves',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'33509', prof:'Widmann, Orihuela M.', slots:[{day:'lunes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+    ]
+  },
+  {
+    id: 'responsabilidad', name: 'Responsabilidad Social y Rel. Comunitarias (ELEC GEN 3) — 4to sem.', group: 4, credits: 3,
+    sections: [
+      { nrc:'33555', prof:'Vargas, Vilca M.', slots:[{day:'viernes',from:'7:00am',to:'8:29am',aula:'Meet'}] },
+      { nrc:'33556', prof:'Vargas, Vilca M.', slots:[{day:'martes',from:'7:00am',to:'8:29am',aula:'Meet'}] },
+    ]
+  },
+  {
+    id: 'persuasion', name: 'Persuasión, Argumentación y Debate (ELEC GEN 4) — 4to sem.', group: 5, credits: 3,
+    sections: [
+      { nrc:'40048', prof:'Romero, Flores R.', slots:[{day:'martes',from:'8:40am',to:'10:09am',aula:'Meet'},{day:'martes',from:'10:20am',to:'11:49am',aula:'Meet'}] },
+      { nrc:'40054', prof:'Ayvar, Nazario A.', slots:[{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'jueves',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'40053', prof:'Ayvar, Nazario A.', slots:[{day:'miercoles',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'miercoles',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'39653', prof:'Ayvar, Nazario A.', slots:[{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'jueves',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'39651', prof:'Romero, Flores R.', slots:[{day:'martes',from:'8:40am',to:'10:09am',aula:'Meet'},{day:'martes',from:'10:20am',to:'11:49am',aula:'Meet'}] },
+      { nrc:'39652', prof:'Ayvar, Nazario A.', slots:[{day:'miercoles',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'miercoles',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+    ]
+  },
+  {
+    id: 'argumentacion', name: 'Argumentación (ELEC GEN 4) — 4to sem.', group: 5, credits: 3,
+    sections: [
+      { nrc:'39995', prof:'Rodríguez, Cruz A.', slots:[{day:'viernes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'viernes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'38887', prof:'Rodríguez, Cruz A.', slots:[{day:'viernes',from:'5:20pm',to:'6:49pm',aula:'A1003'},{day:'viernes',from:'7:00pm',to:'8:29pm',aula:'A1003'}] },
+    ]
+  },
+  {
+    id: 'liderazgo_int', name: 'Lab. Liderazgo e Innovación Intermedio (3er sem.)', short: 'Lab. Liderazgo Intermedio', group: 6, credits: 3,
+    sections: [
+      { nrc:'——', prof:'Por definir', slots:[] },
+    ]
+  },
+  {
+    id: 'liderazgo', name: 'Lab. Liderazgo e Innovación Avanzado (5to sem.)', short: 'Lab. Liderazgo Avanzado', group: 6, credits: 3,
+    sections: [
+      { nrc:'40013', prof:'Manrique, Wollmer K.', slots:[{day:'miercoles',from:'8:40am',to:'10:09am',aula:'Meet'},{day:'jueves',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'40014', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'40010', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'Meet'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
+      { nrc:'40015', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'Meet'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'31303', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'A1003'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'A1003'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'A305'}] },
+      { nrc:'32258', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'A1004'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'A1001'}] },
+      { nrc:'31245', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'A803'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'A803'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'A803'}] },
+      { nrc:'32257', prof:'Manrique, Wollmer K.', slots:[{day:'miercoles',from:'8:40am',to:'10:09am',aula:'A1002'},{day:'jueves',from:'3:40pm',to:'5:09pm',aula:'A304'},{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'A304'}] },
+    ]
+  },
+  // ── 5TO SEMESTRE ────────────────────────────────────────────────────────────
+  {
+    id: 'epidemio', name: 'Epidemiología y Bioestadística', short: 'Epidemiología', group: 0, credits: 4, sem: 5,
+    sections: [
+      { nrc:'38883', prof:'Velarde, Larico J.', teoria:[
+          {day:'lunes',from:'8:30pm',to:'9:59pm',aula:'B605'}
+        ], practica:[
+          { nrc:'38885', prof:'Velarde, Larico J.', slots:[{day:'sabado',from:'3:40pm',to:'6:39pm',aula:'B302'}] },
+          { nrc:'38884', prof:'Velarde, Larico J.', slots:[{day:'jueves',from:'7:00pm',to:'9:59pm',aula:'A504'}] },
+        ]
+      },
+      { nrc:'38851', prof:'Velarde, Larico J.', teoria:[
+          {day:'martes',from:'3:40pm',to:'5:09pm',aula:'B405'}
+        ], practica:[
+          { nrc:'38860', prof:'Velarde, Larico J.', slots:[{day:'martes',from:'5:20pm',to:'6:49pm',aula:'B401'},{day:'miercoles',from:'3:40pm',to:'5:09pm',aula:'B303'}] },
+          { nrc:'38858', prof:'Velarde, Larico J.', slots:[{day:'miercoles',from:'5:20pm',to:'6:49pm',aula:'B303'},{day:'miercoles',from:'7:00pm',to:'8:29pm',aula:'B303'}] },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'nutricion', name: 'Nutrición Humana', short: 'Nutrición', group: 1, credits: 2, sem: 5,
+    sections: [
+      { nrc:'31496', prof:'Becerra, Castillo S.', slots:[{day:'lunes',from:'3:40pm',to:'5:09pm',aula:'B308'}] },
+      { nrc:'31495', prof:'Becerra, Castillo S.', slots:[{day:'lunes',from:'2:00pm',to:'3:29pm',aula:'B308'}] },
+    ]
+  },
+  {
+    id: 'estructfunc2', name: 'Estructura y Función II', short: 'Estructura y Función II', group: 2, credits: 12, sem: 5,
+    sections: [
+      { nrc:'31480', prof:'Cruz, Tagle R. / Teniente, Góngora J. / Salazar, Alejo R.', teoria:[
+          {day:'lunes',from:'3:40pm',to:'5:09pm',aula:'B907'},
+          {day:'lunes',from:'5:20pm',to:'6:49pm',aula:'B907'},
+          {day:'viernes',from:'2:00pm',to:'3:29pm',aula:'B307'}
+        ], practica:[
+          { nrc:'31481', prof:'Cruz / Zumaran / Salazar / Teniente', slots:[
+            {day:'martes',from:'7:00pm',to:'9:59pm',aula:'BS02'},
+            {day:'jueves',from:'5:20pm',to:'6:49pm',aula:'B404'},
+            {day:'viernes',from:'5:20pm',to:'6:49pm',aula:'A402'},
+            {day:'sabado',from:'3:40pm',to:'6:39pm',aula:'B404'}
+          ]},
+          { nrc:'31482', prof:'Cruz / Zumaran / Teniente / Por asignar', slots:[
+            {day:'lunes',from:'7:00pm',to:'9:59pm',aula:'BS02'},
+            {day:'jueves',from:'3:40pm',to:'5:09pm',aula:'B404'},
+            {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'B206'},
+            {day:'viernes',from:'5:20pm',to:'6:49pm',aula:'B206'},
+            {day:'sabado',from:'10:20am',to:'11:49am',aula:'B404'}
+          ]},
+        ]
+      },
+      { nrc:'31483', prof:'Vera, Portilla A. / Tanco, Urday J. / Salazar, Alejo R.', teoria:[
+          {day:'lunes',from:'5:20pm',to:'6:49pm',aula:'B205'},
+          {day:'lunes',from:'7:00pm',to:'8:29pm',aula:'B806'},
+          {day:'viernes',from:'3:40pm',to:'5:09pm',aula:'A303'}
+        ], practica:[
+          { nrc:'31484', prof:'Tanco / Vera / Zumaran', slots:[
+            {day:'martes',from:'3:40pm',to:'5:09pm',aula:'B206'},
+            {day:'martes',from:'5:20pm',to:'6:49pm',aula:'B206'},
+            {day:'miercoles',from:'7:00pm',to:'9:59pm',aula:'BS02'},
+            {day:'viernes',from:'7:00pm',to:'9:59pm',aula:'A402'}
+          ]},
+          { nrc:'31485', prof:'Tanco / Vera / Zumaran / Por asignar', slots:[
+            {day:'martes',from:'7:00pm',to:'9:59pm',aula:'B206'},
+            {day:'miercoles',from:'3:40pm',to:'5:09pm',aula:'BS03'},
+            {day:'miercoles',from:'5:20pm',to:'6:49pm',aula:'BS03'},
+            {day:'viernes',from:'8:30pm',to:'9:59pm',aula:'B404'},
+            {day:'sabado',from:'10:20am',to:'11:49am',aula:'B504'}
+          ]},
+        ]
+      },
+    ]
+  },
+  {
+    id: 'english2', name: 'English Course 2', short: 'English Course 2', group: 3, credits: 3, sem: 5,
+    sections: [
+      { nrc:'33566', prof:'Mendivil, Carrion N.', slots:[{day:'miercoles',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'sabado',from:'5:10pm',to:'6:39pm',aula:'Meet'},{day:'sabado',from:'6:50pm',to:'8:19pm',aula:'Meet'}] },
+      { nrc:'38948', prof:'Pinto, Arrieta Y.', slots:[{day:'lunes',from:'7:00pm',to:'8:29pm',aula:'Meet'},{day:'jueves',from:'7:00pm',to:'9:59pm',aula:'Meet'}] },
+      { nrc:'38951', prof:'Laos, Haro P.', slots:[{day:'miercoles',from:'7:00pm',to:'9:59pm',aula:'Meet'},{day:'jueves',from:'8:30pm',to:'9:59pm',aula:'Meet'}] },
+      { nrc:'33564', prof:'Quispe, Taco P.', slots:[{day:'lunes',from:'2:00pm',to:'3:29pm',aula:'Meet'},{day:'lunes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'miercoles',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'33565', prof:'Pinto, Arrieta Y.', slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'viernes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'viernes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'31271', prof:'Quispe, Taco P.', slots:[{day:'martes',from:'2:00pm',to:'3:29pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'jueves',from:'2:00pm',to:'3:29pm',aula:'Meet'}] },
+      { nrc:'33563', prof:'Quispe, Taco P.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'miercoles',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
+      { nrc:'32368', prof:'Pinto, Arrieta Y.', slots:[{day:'martes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'sabado',from:'2:00pm',to:'3:29pm',aula:'Meet'},{day:'sabado',from:'3:40pm',to:'5:09pm',aula:'Meet'}] },
+      { nrc:'38949', prof:'Laos, Haro P.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'Meet'},{day:'jueves',from:'2:00pm',to:'3:29pm',aula:'Meet'}] },
+      { nrc:'38947', prof:'Pinto, Arrieta Y.', slots:[{day:'lunes',from:'8:30pm',to:'9:59pm',aula:'Meet'},{day:'miercoles',from:'7:00pm',to:'9:59pm',aula:'Meet'}] },
+      { nrc:'34515', prof:'Mendivil, Carrion N.', slots:[{day:'jueves',from:'7:00pm',to:'8:29pm',aula:'Meet'},{day:'viernes',from:'2:00pm',to:'3:29pm',aula:'Meet'},{day:'viernes',from:'3:40pm',to:'5:09pm',aula:'Meet'}] },
+      { nrc:'31302', prof:'Quispe, Taco P.', slots:[{day:'miercoles',from:'8:30pm',to:'9:59pm',aula:'Meet'},{day:'viernes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'viernes',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
+      { nrc:'31241', prof:'Quispe, Taco P.', slots:[{day:'jueves',from:'7:00pm',to:'8:29pm',aula:'Meet'},{day:'viernes',from:'2:00pm',to:'3:29pm',aula:'Meet'},{day:'viernes',from:'3:40pm',to:'5:09pm',aula:'Meet'}] },
+      { nrc:'31221', prof:'Salas, Ugarte J.', slots:[{day:'jueves',from:'2:00pm',to:'3:29pm',aula:'Meet'},{day:'viernes',from:'2:00pm',to:'3:29pm',aula:'Meet'},{day:'viernes',from:'3:40pm',to:'5:09pm',aula:'Meet'}] },
+    ]
+  },
+  {
+    id: 'liderazgo5', name: 'Lab. Liderazgo e Innovación Avanzado (5to sem.)', short: 'Lab. Liderazgo Avanzado', group: 4, credits: 3, sem: 5,
+    sections: [
+      { nrc:'40013', prof:'Manrique, Wollmer K.', slots:[{day:'miercoles',from:'8:40am',to:'10:09am',aula:'Meet'},{day:'jueves',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'40014', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'40010', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'Meet'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
+      { nrc:'40015', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'Meet'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
+      { nrc:'31303', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'A1003'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'A1003'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'A305'}] },
+      { nrc:'32258', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'A1004'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'A1001'}] },
+      { nrc:'31245', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'A803'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'A803'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'A803'}] },
+      { nrc:'32257', prof:'Manrique, Wollmer K.', slots:[{day:'miercoles',from:'8:40am',to:'10:09am',aula:'A1002'},{day:'jueves',from:'3:40pm',to:'5:09pm',aula:'A304'},{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'A304'}] },
+    ]
+  },
+];
+
+// State
+let matCurrentSem = 3;
+const MAT_SEM_READY = new Set([3, 5]); // semesters with data loaded
+
+function matSetSem(sem) {
+  matCurrentSem = sem;
+  // Update buttons
+  document.querySelectorAll('.mat-sem-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', [2,3,4,5][i] === sem);
+  });
+  // Show/hide layout vs placeholder
+  const layout = document.getElementById('mat-sim-layout');
+  const placeholder = document.getElementById('mat-sem-placeholder');
+  if (MAT_SEM_READY.has(sem)) {
+    layout.style.display = '';
+    placeholder.style.display = 'none';
+    matSelected = {};
+    matPickerActive = new Set(matCoursesForSem().map(c => c.id));
+    matRenderPicker();
+    matRenderCourses();
+    matRenderGrid();
+  } else {
+    layout.style.display = 'none';
+    placeholder.style.display = 'block';
+  }
+}
+
+function matCoursesForSem() {
+  return MAT_COURSES.filter(c => (c.sem || 3) === matCurrentSem);
+}
+
+let matSelected = {}; // courseId -> {sectionNrc, practicaNrc}
+let matPickerActive = new Set(MAT_COURSES.filter(c => (c.sem||3) === 3).map(c => c.id));
+
+function matPickerToggle(courseId) {
+  if (matPickerActive.has(courseId)) {
+    matPickerActive.delete(courseId);
+    delete matSelected[courseId];
+  } else {
+    matPickerActive.add(courseId);
+  }
+  matRenderPicker();
+  matRenderCourses();
+  matRenderGrid();
+}
+
+function matRenderPicker() {
+  const el = document.getElementById('mat-picker-grid');
+  const badge = document.getElementById('mat-credits-total');
+
+  let totalCredits = 0;
+  matCoursesForSem().forEach(c => { if (matPickerActive.has(c.id)) totalCredits += (c.credits || 0); });
+
+  const CREDIT_MIN = 12;
+  const CREDIT_MAX = 25;
+  if (badge) {
+    badge.textContent = `${totalCredits} créditos`;
+    badge.classList.toggle('over', totalCredits > CREDIT_MAX);
+    badge.classList.toggle('under', totalCredits > 0 && totalCredits < CREDIT_MIN);
+  }
+
+  if (!el) return;
+
+  el.innerHTML = matCoursesForSem().map(course => {
+    const color = MAT_COLORS[course.group % MAT_COLORS.length];
+    const active = matPickerActive.has(course.id);
+    const shortName = course.short || course.name.split(' ').slice(0,2).join(' ');
+    return `<div class="mat-picker-chip ${active ? 'active' : ''}"
+      style="${active ? `border-color:${color[1]};background:${color[0]}` : ''}"
+      onclick="matPickerToggle('${course.id}')">
+      <div class="chip-dot" style="background:${active ? color[1] : 'var(--border)'}"></div>
+      <span>${shortName}</span>
+      <span class="chip-credits">${course.credits || 0}cr</span>
+    </div>`;
+  }).join('');
+}
+
+function matGetAllSlots(courseId, sectionNrc, practicaNrc) {
+  const course = MAT_COURSES.find(c => c.id === courseId);
+  if (!course) return [];
+  const sec = course.sections.find(s => s.nrc === sectionNrc);
+  if (!sec) return [];
+  let slots = [];
+  // teoria slots
+  if (sec.teoria) slots.push(...sec.teoria.map(s => ({...s, day: matDayToGrid(s.day), start: matParseTime(s.from), end: matParseTime(s.to)})));
+  // practica slots
+  if (sec.practica && practicaNrc) {
+    const prac = sec.practica.find(p => p.nrc === practicaNrc);
+    if (prac) slots.push(...prac.slots.map(s => ({...s, day: matDayToGrid(s.day), start: matParseTime(s.from), end: matParseTime(s.to), isPractica: true})));
+  }
+  // simple slots (estadistica)
+  if (sec.slots) slots.push(...sec.slots.map(s => ({...s, day: matDayToGrid(s.day), start: matParseTime(s.from), end: matParseTime(s.to)})));
+  return slots.filter(s => s.day >= 0);
+}
+
+function matCheckConflict(slotsA, slotsB) {
+  for (const a of slotsA) for (const b of slotsB) {
+    if (a.day === b.day && a.start < b.end && b.start < a.end) return true;
+  }
+  return false;
+}
+
+function matHasConflicts() {
+  const ids = Object.keys(matSelected);
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i+1; j < ids.length; j++) {
+      const sa = matGetAllSlots(ids[i], matSelected[ids[i]].sectionNrc, matSelected[ids[i]].practicaNrc);
+      const sb = matGetAllSlots(ids[j], matSelected[ids[j]].sectionNrc, matSelected[ids[j]].practicaNrc);
+      if (matCheckConflict(sa, sb)) return true;
+    }
+  }
+  return false;
+}
+
+function matSelectSection(courseId, sectionNrc, practicaNrc) {
+  if (matSelected[courseId]?.sectionNrc === sectionNrc && matSelected[courseId]?.practicaNrc === practicaNrc) {
+    delete matSelected[courseId];
+  } else {
+    // Electivo exclusivity: only one course per group (groups 3,4,5,6)
+    const course = MAT_COURSES.find(c => c.id === courseId);
+    if (course && [3,4,5,6].includes(course.group)) {
+      MAT_COURSES.filter(c => c.group === course.group && c.id !== courseId && (c.sem||3) === matCurrentSem)
+        .forEach(c => delete matSelected[c.id]);
+    }
+    // Conflict check against all currently selected courses
+    const newSlots = matGetAllSlots(courseId, sectionNrc, practicaNrc);
+    const conflictWith = [];
+    for (const [cid, sel] of Object.entries(matSelected)) {
+      if (cid === courseId) continue;
+      const other = matGetAllSlots(cid, sel.sectionNrc, sel.practicaNrc);
+      if (matCheckConflict(newSlots, other)) {
+        const c = MAT_COURSES.find(x => x.id === cid);
+        conflictWith.push(c ? c.name.split(' ').slice(0,3).join(' ') : cid);
+      }
+    }
+    if (conflictWith.length > 0) {
+      alert(`Este horario se cruza con:\n• ${conflictWith.join('\n• ')}\n\nElige otra sección o desmatricula el curso en conflicto primero.`);
+      matRenderCourses();
+      matRenderGrid();
+      return;
+    }
+    matSelected[courseId] = { sectionNrc, practicaNrc };
+  }
+  matRenderCourses();
+  matRenderGrid();
+}
+
+function matClear() {
+  matSelected = {};
+  matRenderCourses();
+  matRenderGrid();
+}
+
+function matGenerate() {
+  // Check credit range first
+  let totalCredits = 0;
+  matCoursesForSem().forEach(c => { if (matPickerActive.has(c.id)) totalCredits += (c.credits || 0); });
+  if (totalCredits > 25) {
+    alert(`Tienes ${totalCredits} créditos seleccionados. El máximo permitido es 25. Desmarca algún curso para continuar.`);
+    return;
+  }
+  if (totalCredits < 12) {
+    alert(`Tienes ${totalCredits} créditos seleccionados. El mínimo para mantener condición de estudiante regular es 12. Agrega más cursos para continuar.`);
+    return;
+  }
+
+  const compact = document.getElementById('mat-compact-check')?.checked;
+  const courses = matCoursesForSem().filter(c => matPickerActive.has(c.id));
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // Score a combo: sum of gaps > 20min per day (lower = more compact)
+  function compactScore(chosen) {
+    const slotsByDay = {};
+    for (const [cid, sel] of Object.entries(chosen)) {
+      const slots = matGetAllSlots(cid, sel.sectionNrc, sel.practicaNrc);
+      slots.forEach(s => {
+        if (!slotsByDay[s.day]) slotsByDay[s.day] = [];
+        slotsByDay[s.day].push(s);
+      });
+    }
+    let penalty = 0;
+    Object.values(slotsByDay).forEach(daySlots => {
+      daySlots.sort((a, b) => a.start - b.start);
+      for (let i = 1; i < daySlots.length; i++) {
+        const gap = daySlots[i].start - daySlots[i-1].end;
+        if (gap > 20) penalty += gap;
+      }
+    });
+    return penalty;
+  }
+
+  function tryCombo(idx, chosen) {
+    if (idx === courses.length) return chosen;
+    const course = courses[idx];
+    if ([3,4,5,6].includes(course.group)) {
+      const alreadyHasGroup = Object.keys(chosen).some(cid => {
+        const c = MAT_COURSES.find(x => x.id === cid);
+        return c && c.group === course.group;
+      });
+      if (alreadyHasGroup) return tryCombo(idx+1, chosen);
+    }
+    const shuffledSections = shuffle(course.sections);
+    for (const sec of shuffledSections) {
+      const pracOptions = sec.practica ? shuffle(sec.practica) : [null];
+      for (const prac of pracOptions) {
+        const pracNrc = prac ? prac.nrc : null;
+        const slots = matGetAllSlots(course.id, sec.nrc, pracNrc);
+        let conflict = false;
+        for (const [cid, sel] of Object.entries(chosen)) {
+          const other = matGetAllSlots(cid, sel.sectionNrc, sel.practicaNrc);
+          if (matCheckConflict(slots, other)) { conflict = true; break; }
+        }
+        if (!conflict) {
+          const result = tryCombo(idx+1, {...chosen, [course.id]: {sectionNrc: sec.nrc, practicaNrc: pracNrc}});
+          if (result) return result;
+        }
+      }
+    }
+    return null;
+  }
+
+  // In compact mode: try many combos, keep the one with lowest gap penalty
+  const ATTEMPTS = compact ? 40 : 20;
+  let bestResult = null;
+  let bestScore = Infinity;
+  const currentKey = JSON.stringify(matSelected);
+
+  for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
+    const candidate = tryCombo(0, {});
+    if (!candidate) continue;
+    const candidateKey = JSON.stringify(candidate);
+    const score = compact ? compactScore(candidate) : 0;
+
+    if (compact) {
+      if (score < bestScore) { bestScore = score; bestResult = candidate; }
+    } else {
+      if (candidateKey !== currentKey) { bestResult = candidate; break; }
+      if (attempt === ATTEMPTS - 1 && !bestResult) bestResult = candidate;
+    }
+  }
+
+  if (bestResult) {
+    matSelected = bestResult;
+    matRenderCourses();
+    matRenderGrid();
+  } else {
+    alert('No se encontró una combinación sin choques. Intenta desmarcar algún curso primero.');
+  }
+}
+
+function matRenderCourses() {
+  const el = document.getElementById('mat-courses');
+  if (!el) return;
+
+  const GROUP_LABELS = matCurrentSem === 5 ? {
+    0: null, 1: null, 2: null, 3: null, 4: null
+  } : {
+    0: null, 1: null, 2: null,
+    3: 'ELEC GEN 2', 4: 'ELEC GEN 3', 5: 'ELEC GEN 4', 6: 'Lab. Liderazgo (elige uno)'
+  };
+
+  let lastGroup = -1;
+  el.innerHTML = matCoursesForSem().map((course, ci) => {
+    const color = MAT_COLORS[course.group % MAT_COLORS.length];
+    const sel = matSelected[course.id];
+    const isOpen = el.querySelector(`[data-course="${course.id}"]`)?.classList.contains('open');
+
+    let separator = '';
+    if (course.group !== lastGroup && GROUP_LABELS[course.group]) {
+      separator = `<div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:${color[1]};padding:0.5rem 0.2rem 0.2rem;margin-top:0.3rem;">${GROUP_LABELS[course.group]}</div>`;
+    }
+    lastGroup = course.group;
+
+    const sections = course.sections.map(sec => {
+      const teoriaStr = sec.teoria
+        ? sec.teoria.map(s => `${s.day.substring(0,3)} ${s.from}-${s.to}`).join(', ')
+        : sec.slots ? sec.slots.map(s => `${s.day.substring(0,3)} ${s.from}-${s.to}`).join(', ') : '';
+
+      if (sec.practica) {
+        return sec.practica.map(prac => {
+          const isSelected = sel?.sectionNrc === sec.nrc && sel?.practicaNrc === prac.nrc;
+          const pracStr = prac.slots.map(s => `${s.day.substring(0,3)} ${s.from}-${s.to}`).join(', ');
+          const pracProf = prac.prof ? `<div style="font-size:0.62rem;font-weight:700;color:var(--text);margin-top:0.15rem">Práctica: ${prac.prof}</div>` : '';
+          return `<button class="mat-section-btn ${isSelected ? 'selected' : ''}"
+            onclick="matSelectSection('${course.id}','${sec.nrc}','${prac.nrc}')">
+            <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc} + ${prac.nrc}</div>
+            <div class="mat-section-prof">${sec.prof}</div>
+            <div class="mat-section-time"><span style="font-weight:600;color:var(--text)">Teoría:</span> ${teoriaStr}</div>
+            ${pracProf}
+            <div class="mat-section-time"><span style="font-weight:600;color:var(--text)">Práctica:</span> ${pracStr}</div>
+          </button>`;
+        }).join('');
+      } else {
+        const isSelected = sel?.sectionNrc === sec.nrc;
+        return `<button class="mat-section-btn ${isSelected ? 'selected' : ''}"
+          onclick="matSelectSection('${course.id}','${sec.nrc}',null)">
+          <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc}</div>
+          <div class="mat-section-prof">${sec.prof}</div>
+          <div class="mat-section-time">${teoriaStr}</div>
+        </button>`;
+      }
+    }).join('');
+
+    const hasSelection = !!sel;
+    return `${separator}<div class="mat-course-card ${isOpen ? 'open' : ''}" data-course="${course.id}" style="border-left:3px solid ${color[1]}">
+      <div class="mat-course-header" onclick="matToggleCourse('${course.id}')">
+        <div class="mat-course-dot" style="background:${color[1]}"></div>
+        <div class="mat-course-name">${course.name} ${hasSelection ? '<span style="color:'+color[1]+'">✓</span>' : ''}</div>
+        <div class="mat-course-chevron">▼</div>
+      </div>
+      <div class="mat-sections">${sections}</div>
+    </div>`;
+  }).join('');
+
+  const badge = document.getElementById('mat-conflict-badge');
+  if (badge) badge.style.display = matHasConflicts() ? 'inline-flex' : 'none';
+}
+
+function matToggleCourse(courseId) {
+  const card = document.querySelector(`[data-course="${courseId}"]`);
+  if (card) card.classList.toggle('open');
+}
+
+function matRenderGrid() {
+  const el = document.getElementById('mat-grid');
+  if (!el) return;
+
+  // Time range: 7am (420) to 10pm (1320), slots every 30min
+  const START = 7 * 60;
+  const END = 22 * 60;
+  const SLOT = 30;
+  const rows = (END - START) / SLOT;
+
+  // Build grid HTML
+  let html = '';
+  // Header row
+  html += '<div class="mat-cell header" style="border-bottom:1px solid var(--border)"></div>';
+  MAT_DAYS.forEach(d => {
+    html += `<div class="mat-cell header">${d}</div>`;
+  });
+
+  // Time rows
+  for (let r = 0; r < rows; r++) {
+    const mins = START + r * SLOT;
+    const hh = Math.floor(mins/60);
+    const mm = String(mins%60).padStart(2,'0');
+    const label = hh >= 12 ? `${hh===12?12:hh-12}:${mm}pm` : `${hh}:${mm}am`;
+    html += `<div class="mat-cell time-label">${r%2===0?label:''}</div>`;
+    for (let d = 0; d < 7; d++) {
+      html += `<div class="mat-cell" data-row="${r}" data-col="${d}"></div>`;
+    }
+  }
+
+  el.innerHTML = html;
+
+  // Place blocks
+  Object.entries(matSelected).forEach(([courseId, sel]) => {
+    const course = MAT_COURSES.find(c => c.id === courseId);
+    const color = MAT_COLORS[course.group % MAT_COLORS.length];
+    const slots = matGetAllSlots(courseId, sel.sectionNrc, sel.practicaNrc);
+
+
+
+
+
+    // Track last block end-row per day to snap consecutive blocks with gap < 15min
+    const lastEndRow = {};
+
+    slots.forEach(slot => {
+      if (slot.day < 0 || slot.day > 6) return;
+      const startRow = Math.round((slot.start - START) / SLOT);
+      const endRow = Math.round((slot.end - START) / SLOT);
+      // Snap to previous block if gap < 15 min (1 slot = 30min, so < 0.5 slots)
+      const prevEnd = lastEndRow[slot.day];
+      const snapRow = (prevEnd !== undefined && startRow - prevEnd < 1) ? prevEnd : startRow;
+      lastEndRow[slot.day] = endRow;
+      if (startRow < 0 || endRow > rows) return;
+
+      const cell = el.querySelector(`[data-row="${snapRow}"][data-col="${slot.day}"]`);
+      if (!cell) return;
+
+      const block = document.createElement('div');
+      block.className = 'mat-block';
+      const blockHeight = (endRow - snapRow) * 32;
+      block.style.cssText = `background:${color[0]};border-left:2px solid ${color[1]};top:0;height:${blockHeight}px;color:var(--text);`;
+      // Find prof for this slot
+      const sec = course.sections.find(s => s.nrc === sel.sectionNrc);
+      let profName = sec?.prof || '';
+      if (sel.practicaNrc && sec?.practica) {
+        const prac = sec.practica.find(p => p.nrc === sel.practicaNrc);
+        if (prac?.prof) profName = prac.prof;
+      }
+      const displayNrc = sel.practicaNrc && slot.isPractica ? sel.practicaNrc : sel.sectionNrc;
+      const fmtTime = m => { const h=Math.floor(m/60), min=String(m%60).padStart(2,'0'), ap=h>=12?'pm':'am', h12=h>12?h-12:h===0?12:h; return `${h12}:${min}${ap}`; };
+      const timeRange = `${fmtTime(slot.start)}–${fmtTime(slot.end)}`;
+      block.innerHTML = `<div style="font-weight:800;font-size:0.68rem;line-height:1.2;color:${color[1]}">${course.name.split(' ')[0]}</div><div style="font-size:0.6rem;color:var(--text);opacity:0.9">${profName}</div><div style="font-size:0.6rem;font-weight:700;color:var(--text);opacity:0.85">${timeRange}</div><div style="font-size:0.55rem;color:var(--text);opacity:0.7">NRC ${sel.sectionNrc} · ${slot.aula||''}</div>`;
+      cell.appendChild(block);
+    });
+  });
+}
+
+function initMatricula() {
+  matCurrentSem = 3;
+  matSelected = {};
+  matPickerActive = new Set(matCoursesForSem().map(c => c.id));
+  // Reset selector buttons
+  document.querySelectorAll('.mat-sem-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', [2,3,4,5][i] === 3);
+  });
+  document.getElementById('mat-sim-layout').style.display = '';
+  document.getElementById('mat-sem-placeholder').style.display = 'none';
+  matRenderPicker();
+  matRenderCourses();
+  matRenderGrid();
 }
 
 applyStoredTheme();
