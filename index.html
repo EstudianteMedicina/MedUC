@@ -4554,7 +4554,7 @@ function matRenderGrid() {
       const displayNrc = sel.practicaNrc && slot.isPractica ? sel.practicaNrc : sel.sectionNrc;
       const fmtTime = m => { const h=Math.floor(m/60), min=String(m%60).padStart(2,'0'), ap=h>=12?'pm':'am', h12=h>12?h-12:h===0?12:h; return `${h12}:${min}${ap}`; };
       const timeRange = `${fmtTime(slot.start)}–${fmtTime(slot.end)}`;
-      block.innerHTML = `<div style="font-weight:800;font-size:0.68rem;line-height:1.2;color:${color[1]}">${course.name.split(' ')[0]}</div><div style="font-size:0.6rem;color:var(--text)">${profName}</div><div style="font-size:0.6rem;font-weight:700;color:var(--text)">${timeRange}</div><div style="font-size:0.55rem;color:var(--muted)">NRC ${sel.sectionNrc} · ${slot.aula||''}</div>`;
+      block.innerHTML = `<div style="font-weight:800;font-size:0.68rem;line-height:1.2;color:${color[1]}">${course.name.split(' ')[0]}</div><div style="font-size:0.6rem;color:var(--text)">${profName}</div><div style="font-size:0.6rem;font-weight:700;color:var(--text)">${timeRange}</div><div style="font-size:0.55rem;color:var(--muted)">NRC ${slot.isPractica && sel.practicaNrc ? sel.practicaNrc : sel.sectionNrc} · ${slot.aula||''}</div>`;
       cell.appendChild(block);
     });
   });
