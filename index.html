@@ -253,7 +253,8 @@
     transition: all 0.15s; width: 100%;
   }
   .mat-section-btn:hover { border-color: var(--accent); }
-  .mat-section-btn.selected { border-color: var(--accent); background: rgba(0,194,255,0.08); }
+  .mat-section-btn.agotado { opacity: 0.5; cursor: not-allowed; }
+  .mat-section-btn.agotado::after { content: ' · AGOTADO'; color: #ef4444; font-weight: 800; font-size: 0.6rem; } border-color: var(--accent); background: rgba(0,194,255,0.08); }
   .mat-section-btn.conflict { border-color: #ef4444; background: rgba(239,68,68,0.08); }
   .mat-section-nrc { font-size: 0.65rem; font-weight: 700; color: var(--accent); }
   .mat-section-prof { font-size: 0.7rem; color: var(--text); font-weight: 600; margin: 0.1rem 0; }
@@ -4009,8 +4010,8 @@ const MAT_COURSES = [
     id: 'liderazgo', name: 'Lab. Liderazgo e Innovación Avanzado (5to sem.)', short: 'Lab. Liderazgo Avanzado', group: 6, credits: 3,
     sections: [
       { nrc:'40013', prof:'Manrique, Wollmer K.', slots:[{day:'miercoles',from:'8:40am',to:'10:09am',aula:'Meet'},{day:'jueves',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
-      { nrc:'40014', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
-      { nrc:'40010', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'Meet'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
+      { nrc:'40014', prof:'Manrique, Wollmer K.', agotado:true, slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'40010', prof:'Manrique, Wollmer K.', agotado:true, slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'Meet'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
       { nrc:'40015', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'Meet'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
       { nrc:'31303', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'A1003'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'A1003'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'A305'}] },
       { nrc:'32258', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'A1004'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'A1001'}] },
@@ -4113,8 +4114,8 @@ const MAT_COURSES = [
     id: 'liderazgo5', name: 'Lab. Liderazgo e Innovación Avanzado (5to sem.)', short: 'Lab. Liderazgo Avanzado', group: 4, credits: 3, sem: 5,
     sections: [
       { nrc:'40013', prof:'Manrique, Wollmer K.', slots:[{day:'miercoles',from:'8:40am',to:'10:09am',aula:'Meet'},{day:'jueves',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'jueves',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
-      { nrc:'40014', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
-      { nrc:'40010', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'Meet'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
+      { nrc:'40014', prof:'Manrique, Wollmer K.', agotado:true, slots:[{day:'lunes',from:'5:20pm',to:'6:49pm',aula:'Meet'},{day:'martes',from:'3:40pm',to:'5:09pm',aula:'Meet'},{day:'martes',from:'5:20pm',to:'6:49pm',aula:'Meet'}] },
+      { nrc:'40010', prof:'Manrique, Wollmer K.', agotado:true, slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'Meet'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'Meet'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'Meet'}] },
       { nrc:'40015', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'Meet'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'Meet'}] },
       { nrc:'31303', prof:'Manrique, Wollmer K.', slots:[{day:'lunes',from:'10:20am',to:'11:49am',aula:'A1003'},{day:'lunes',from:'12:00pm',to:'1:29pm',aula:'A1003'},{day:'miercoles',from:'12:00pm',to:'1:29pm',aula:'A305'}] },
       { nrc:'32258', prof:'Perlacios, Valdivia J.', slots:[{day:'lunes',from:'7:00pm',to:'9:59pm',aula:'A1004'},{day:'martes',from:'7:00pm',to:'8:29pm',aula:'A1001'}] },
@@ -4344,9 +4345,9 @@ function matGenerate() {
       });
       if (alreadyHasGroup) return tryCombo(idx+1, chosen);
     }
-    const shuffledSections = shuffle(course.sections);
+    const shuffledSections = shuffle(course.sections.filter(s => !s.agotado));
     for (const sec of shuffledSections) {
-      const pracOptions = sec.practica ? shuffle(sec.practica) : [null];
+      const pracOptions = sec.practica ? shuffle(sec.practica.filter(p => !p.agotado)) : [null];
       for (const prac of pracOptions) {
         const pracNrc = prac ? prac.nrc : null;
         const slots = matGetAllSlots(course.id, sec.nrc, pracNrc);
@@ -4429,11 +4430,12 @@ function matRenderCourses() {
       if (sec.practica) {
         return sec.practica.map(prac => {
           const isSelected = sel?.sectionNrc === sec.nrc && sel?.practicaNrc === prac.nrc;
+          const isAgotado = !!prac.agotado;
           const pracLines = prac.slots.map(fmtSlotLine).join('');
           const pracProf = (!prac.slots[0]?.prof && prac.prof) ? `<div style="font-size:0.62rem;font-weight:700;color:var(--text);margin-top:0.15rem">Práctica: ${prac.prof}</div>` : '';
-          return `<button class="mat-section-btn ${isSelected ? 'selected' : ''}"
-            onclick="matSelectSection('${course.id}','${sec.nrc}','${prac.nrc}')">
-            <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc} + ${prac.nrc}</div>
+          return `<button class="mat-section-btn ${isSelected ? 'selected' : ''} ${isAgotado ? 'agotado' : ''}"
+            onclick="${isAgotado ? '' : `matSelectSection('${course.id}','${sec.nrc}','${prac.nrc}')`}">
+            <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc} + ${prac.nrc}${isAgotado ? ' <span style="color:#ef4444;font-size:0.6rem">● AGOTADO</span>' : ''}</div>
             <div class="mat-section-prof">${sec.prof}</div>
             <div class="mat-section-time"><span style="font-weight:600;color:var(--text)">Teoría:</span></div>
             ${teoriaLines}
@@ -4444,9 +4446,10 @@ function matRenderCourses() {
         }).join('');
       } else {
         const isSelected = sel?.sectionNrc === sec.nrc;
-        return `<button class="mat-section-btn ${isSelected ? 'selected' : ''}"
-          onclick="matSelectSection('${course.id}','${sec.nrc}',null)">
-          <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc}</div>
+        const isAgotado = !!sec.agotado;
+        return `<button class="mat-section-btn ${isSelected ? 'selected' : ''} ${isAgotado ? 'agotado' : ''}"
+          onclick="${isAgotado ? '' : `matSelectSection('${course.id}','${sec.nrc}',null)`}">
+          <div class="mat-section-nrc" style="color:${color[1]}">NRC ${sec.nrc}${isAgotado ? ' <span style="color:#ef4444;font-size:0.6rem">● AGOTADO</span>' : ''}</div>
           <div class="mat-section-prof">${sec.prof}</div>
           ${teoriaLines}
         </button>`;
