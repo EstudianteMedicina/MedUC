@@ -312,7 +312,21 @@
   .light .mat-grid { border-color: #e2e8f0; }
   .light .mat-cell { border-color: #e2e8f0; }
 
-  .mat-compact-toggle {
+  .nav-tab-disabled { opacity: 0.45; cursor: not-allowed; position: relative; }
+  .nav-tab-disabled:hover { background: transparent !important; color: var(--muted) !important; }
+  .mat-disabled-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mat-disabled-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 2rem 2.5rem; max-width: 380px; text-align: center;
+  }
+  .mat-disabled-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+  .mat-disabled-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; }
+  .mat-disabled-sub { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin-bottom: 1.2rem; }
+  .mat-disabled-close { padding: 0.5rem 1.5rem; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+  .mat-disabled-close:hover { border-color: var(--accent); color: var(--accent); }
     display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
     font-size: 0.72rem; font-weight: 600; color: var(--text); user-select: none;
     margin-left: 0.4rem;
@@ -1195,7 +1209,7 @@
     <button class="nav-tab" onclick="showPage('calendario')">Calendario</button>
     <button class="nav-tab" onclick="showPage('cursos')">Cursos</button>
     <button class="nav-tab" onclick="showPage('malla')">Malla</button>
-    <button class="nav-tab" onclick="showPage('matricula')">Simulador</button>
+    <button class="nav-tab nav-tab-disabled" onclick="showMatriculaDisabled()" title="Fuera de período de matrícula">Simulador 🔒</button>
     <button class="nav-tab" onclick="showPage('info')">Info</button>
   </div>
 </nav>
@@ -3637,6 +3651,23 @@ function tutScroll(dir) {
   tutIndex = Math.max(0, Math.min(tutIndex + dir, total - 1));
   const cardWidth = cards[0].offsetWidth + 16;
   track.style.transform = `translateX(-${tutIndex * cardWidth}px)`;
+}
+
+function showMatriculaDisabled() {
+  const existing = document.getElementById('mat-disabled-modal');
+  if (existing) return;
+  const modal = document.createElement('div');
+  modal.id = 'mat-disabled-modal';
+  modal.className = 'mat-disabled-modal';
+  modal.innerHTML = `
+    <div class="mat-disabled-box">
+      <div class="mat-disabled-icon">🔒</div>
+      <div class="mat-disabled-title">Simulador deshabilitado</div>
+      <div class="mat-disabled-sub">El período de matrícula ya finalizó. El simulador estará disponible nuevamente antes del próximo proceso de matrícula.</div>
+      <button class="mat-disabled-close" onclick="document.getElementById('mat-disabled-modal').remove()">Entendido</button>
+    </div>`;
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
 }
 
 // ── DAY FILTER ─────────────────────────────────────────────
